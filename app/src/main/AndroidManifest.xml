@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="it.uninsubria.studenti.rripamonti.biblioteca">
-
+    package="it.uninsubria.studenti.rripamonti.biblioteca"
+    >
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/splash"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
-            android:name=".SplashScreen"
+            android:name=".activity.SplashScreen"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,6 +18,39 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/register" />
+        <activity
+            android:name=".activity.user.UserMainActivity"
+            android:label="Last Added Objects">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.user.SearchActivity"
+            android:label="Search" />
+        <activity
+            android:name=".activity.user.RequestLoanActivity"
+            android:label="Request Loan" />
+        <activity
+            android:name=".activity.user.LoanStatusActivity"
+            android:label="Loan Status" />
+        <activity
+            android:name=".activity.admin.AdminMainActivity"
+            android:label="New Loan Request">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.admin.ManageLoanActivity"
+            android:label="Manage Loan" />
+        <activity android:name=".activity.admin.AddObjectActivity"></activity>
     </application>
 
 </manifest>
