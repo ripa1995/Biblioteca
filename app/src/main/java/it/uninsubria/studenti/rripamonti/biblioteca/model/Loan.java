@@ -7,69 +7,40 @@ import java.util.GregorianCalendar;
  */
 
 public class Loan {
-    private long libraryObjectID;
-    private long userID;
-    private long loanID;
-    private GregorianCalendar start_date;
-    private GregorianCalendar end_date;
-    private boolean accepted;
-    public Loan(){
-        libraryObjectID = -1;
-        userID = -1;
-        start_date = null;
-        end_date = null;
-        accepted = false;
-    }
-    public Loan(int mLibraryObjectID, int mUserID){
-        libraryObjectID = mLibraryObjectID;
-        userID = mUserID;
+    private LibraryObject lo;
+    private long start_date;
+    private long end_date;
+
+
+    public Loan() {
+        lo = null;
+        start_date = 0;
+
+
     }
 
-    public long getLibraryObjectID() {
-        return libraryObjectID;
+    public Loan(LibraryObject mLo) {
+        this.lo = mLo;
+
+        start_date = new GregorianCalendar().getTimeInMillis();
+
     }
 
-    public void setLibraryObjectID(long libraryObjectID) {
-        this.libraryObjectID = libraryObjectID;
+    public LibraryObject getLibraryObject() {
+        return lo;
     }
 
-    public long getUserID() {
-        return userID;
+    public void setLibraryObject(LibraryObject libraryObjectID) {
+        this.lo = libraryObjectID;
     }
 
-    public void setUserID(long userID) {
-        this.userID = userID;
-    }
-
-    public GregorianCalendar getStart_date() {
+    public long getStart_date() {
         return start_date;
     }
 
-    public void setStart_date(GregorianCalendar start_date) {
+    public void setStart_date(long start_date) {
         this.start_date = start_date;
     }
 
-    public GregorianCalendar getEnd_date() {
-        return end_date;
-    }
 
-    public void setEnd_date(GregorianCalendar end_date) {
-        this.end_date = end_date;
-    }
-
-    public boolean isAccepted() {
-        return accepted;
-    }
-
-    public void setAccepted(boolean accepted) {
-        this.accepted = accepted;
-    }
-
-    public long getLoanID() {
-        return loanID;
-    }
-
-    public void setLoanID(long loanID) {
-        this.loanID = loanID;
-    }
 }

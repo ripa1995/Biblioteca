@@ -1,7 +1,6 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.model;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
+import java.io.Serializable;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
 
@@ -9,8 +8,8 @@ import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
  * Created by rober on 13/04/2017.
  */
 
-public class LibraryObject extends Item{
-    private long id;
+public class LibraryObject implements Serializable{
+
     private String title, author, isbn;
     private String category;
     private Type type;
@@ -19,7 +18,7 @@ public class LibraryObject extends Item{
     private boolean available = false;
 
     public LibraryObject(){
-        id = -1;
+
         title = null;
         author = null;
         category = null;
@@ -32,16 +31,16 @@ public class LibraryObject extends Item{
         author = mAuthor;
         category = mCategory;
         type = mType;
-        available = true;
+    }
+    public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mIsbn){
+        isbn =mIsbn;
+        title = mTitle;
+        author = mAuthor;
+        category = mCategory;
+        type = mType;
     }
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -76,19 +75,10 @@ public class LibraryObject extends Item{
     }
 
 
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
-
     @Override
     public String toString() {
 
             return "LibraryObject{" +
-                    "id=" + id +
                     ", title='" + title + '\'' +
                     ", author='" + author + '\'' +
                     ", category=" + category +

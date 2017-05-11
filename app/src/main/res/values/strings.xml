@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Biblioteca</string>
+    <string name="app_name">Library</string>
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
@@ -26,4 +26,30 @@
         <item>Music</item>
         <item>Film</item>
     </string-array>
+    <string name="title_activity_user_tabbed">UserTabbedActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="obj_not_found">Object not found!</string>
+    <string name="loan_request_failed">Loan already requested for this object!</string>
+    <string name="loan_requested_successfully">Loan requested successfully!</string>
+    <string name="loan_not_started">Loan not started!</string>
+    <string name="user_data">User data:</string>
+    <string name="loan_accepted">Loan accepted!</string>
+    <string name="error">Error!</string>
+    <string name="loan_accept">Loan accepted!</string>
+    <string name="loan_refuse">Loan refused!</string>
+    <string name="new_film">Film created!</string>
+    <string name="new_music">Music created!</string>
+    <string name="new_book">Book created!</string>
+    <string name="new_activity">Activity created!</string>
+    <string name="dateformat_error">Date format not valid! [dd/MM/yyyy]</string>
+    <string name="no_type_selected">You must select a type!</string>
+    <string name="title_activity_firebase_login">Sign in</string>
+    <string name="insert_title_error">Insert title HERE!</string>
+    <string name="object_not_found">Object not found!</string>
+    <string name="title_activity_test">Test</string>
+    <string name="password">Password</string>
 </resources>

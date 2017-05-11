@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "442442519387",
+    "firebase_url": "https://biblioteca-dde67.firebaseio.com",
+    "project_id": "biblioteca-dde67",
+    "storage_bucket": "biblioteca-dde67.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442442519387:android:307afde694483a1a",
+        "android_client_info": {
+          "package_name": "it.uninsubria.studenti.rripamonti.biblioteca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442442519387-ipu25torludjn7f240t2i0jhiqucp9nf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "it.uninsubria.studenti.rripamonti.biblioteca",
+            "certificate_hash": "3cca25634f0f2d99d8404c644dd1483b110dcb92"
+          }
+        },
+        {
+          "client_id": "442442519387-5vhl69j3oi4hcjn58n7kegk7bstqfdg4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKpgoFzqdfTVpp6j8QeNfDyqjXwosFaNk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442442519387-5vhl69j3oi4hcjn58n7kegk7bstqfdg4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

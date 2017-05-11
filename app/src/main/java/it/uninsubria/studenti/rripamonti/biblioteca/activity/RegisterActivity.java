@@ -3,9 +3,10 @@ package it.uninsubria.studenti.rripamonti.biblioteca.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.AsyncTask;
+import android.app.Dialog;
+import android.content.pm.PackageManager;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,21 +15,56 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
-import it.uninsubria.studenti.rripamonti.biblioteca.model.Model;
-import it.uninsubria.studenti.rripamonti.biblioteca.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
+    private static final String TAG = "RegisterActivity" ;
     private Button confirm_btn;
-    private Model model = Model.getInstance();
-    private UserRegisterTask mRegisterTask = null;
+
     private EditText mName, mSurname, mPassword, mEmail;
     private View mProgressView, mRegisterFormView;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference ref;
+    private String name, surname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+
         Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -58,10 +94,13 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemptRegister() {
-        if (mRegisterTask != null) {
-            return;
+        int currentVersion=0;
+        try {
+            currentVersion = getPackageManager().getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0 ).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
-
+        int versionNeed = 10240000;
         // Reset errors.
         mEmail.setError(null);
         mPassword.setError(null);
@@ -69,8 +108,8 @@ public class RegisterActivity extends AppCompatActivity {
         // Store values at the time of the login attempt.
         String email = mEmail.getText().toString();
         String password = mPassword.getText().toString();
-        String name = mName.getText().toString();
-        String surname = mSurname.getText().toString();
+        name = mName.getText().toString();
+        surname = mSurname.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -116,12 +155,57 @@ public class RegisterActivity extends AppCompatActivity {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
             focusView.requestFocus();
+        } else if (currentVersion<versionNeed) {
+            int error = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this);
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(this, error, 1);
+            dialog.show();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mRegisterTask = new UserRegisterTask(name, surname, email, password);
-            mRegisterTask.execute((Void) null);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            mAuth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
+
+                            if(task.isSuccessful()){
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                ref = FirebaseDatabase.getInstance().getReference();
+                                Map<String, String> map = new HashMap<>();
+                                map.put("Name",name.toString());
+                                map.put("Surname", surname.toString());
+                                map.put("Admin", "false");
+                                ref.child("users").child(user.getUid()).setValue(map);
+                                finish();
+
+                            }
+                            // If sign in fails, display a message to the user. If sign in succeeds
+                            // the auth state listener will be notified and logic to handle the
+                            // signed in user can be handled in the listener.
+                            if (!task.isSuccessful()) {
+
+                                showProgress(false);
+                                if (task.getException() instanceof FirebaseNetworkException) {
+                                    Toast toast = Toast.makeText(getApplicationContext(),"No internet connection",Toast.LENGTH_LONG);
+                                    toast.show();
+                                } else {
+                                    mEmail.setText("");
+                                    mPassword.setText("");
+                                    mEmail.setError(getString(R.string.email_used));
+                                    mEmail.requestFocus();
+                                }
+
+                            }
+
+                            // ...
+                        }
+                    });
         }
     }
 
@@ -132,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() > 7;
     }
 
     /**
@@ -172,63 +256,4 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserRegisterTask extends AsyncTask<Void, Void, Boolean> {
-        private final String mNameR;
-        private final String mSurnameR;
-        private final String mEmailR;
-        private final String mPasswordR;
-
-        UserRegisterTask(String name, String surname, String email, String password) {
-            mEmailR = email;
-            mPasswordR = password;
-            mNameR = name;
-            mSurnameR = surname;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            return model.newUser(mNameR, mSurnameR, mEmailR, mPasswordR);
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mRegisterTask = null;
-
-
-            if (success) {
-
-                finish();
-
-
-
-            } else {
-                showProgress(false);
-
-                mEmail.setText("");
-                mPassword.setText("");
-                mEmail.setError(getString(R.string.email_used));
-                mEmail.requestFocus();
-
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mRegisterTask = null;
-            showProgress(false);
-        }
-    }
 }

@@ -1,41 +1,31 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.model;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by rober on 13/04/2017.
  */
 
-public class ExtraActivity extends Item{
+public class ExtraActivity {
     private String title;
     private String name;
     private String surname;
-    private GregorianCalendar date;
-    private long id = -1;
+    private long date;
 
     public ExtraActivity(){
         title = null;
         name = null;
         surname = null;
-        date = null;
+        date = 0;
     }
 
-    public ExtraActivity(String mTitle, String mName, String mSurname, GregorianCalendar mDate){
+    public ExtraActivity(String mTitle, String mName, String mSurname, long mDate){
         title = mTitle;
         name = mName;
         surname = mSurname;
         date = mDate;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -61,17 +51,17 @@ public class ExtraActivity extends Item{
         this.surname = surname;
     }
 
-    public GregorianCalendar getDate() {
+    public long getDate() {
         return date;
     }
 
-    public void setDate(GregorianCalendar date) {
+    public void setDate(long date) {
         this.date = date;
     }
 
     @Override
     public String toString() {
-        String data = new SimpleDateFormat("dd/MM/yyyy").format(date.getTime());
+        String data = new SimpleDateFormat("dd/MM/yyyy").format(date);
         return "ExtraActivity{" +
                 "title='" + title + '\'' +
                 ", name='" + name + '\'' +

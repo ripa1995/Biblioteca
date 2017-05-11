@@ -60,6 +60,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
+            android:hint="ISBN"
+            android:ems="10"
+            android:id="@+id/et_isbn" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
             android:hint="Category"
             android:ems="10"
             android:id="@+id/et_category" />

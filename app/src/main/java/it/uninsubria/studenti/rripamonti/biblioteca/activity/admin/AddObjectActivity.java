@@ -12,20 +12,27 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
-import it.uninsubria.studenti.rripamonti.biblioteca.model.Model;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.ExtraActivity;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
 
 public class AddObjectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
     private static final String TAG ="AddObjectActivity";
-    private EditText tv_title, tv_author, tv_category, tv_name, tv_surname, tv_date;
+    private EditText tv_title, tv_author, tv_category, tv_name, tv_surname, tv_date, tv_isbn;
     private int selected = -1;
     private Button btn_confirm;
-    private Model model = Model.getInstance();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +55,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_name = (EditText) findViewById(R.id.et_name);
         tv_surname = (EditText) findViewById(R.id.et_surname);
         tv_date = (EditText) findViewById(R.id.et_date);
+        tv_isbn = (EditText) findViewById(R.id.et_isbn);
         btn_confirm = (Button) findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(this);
 
@@ -61,6 +69,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.GONE);
                 tv_category.setVisibility(View.GONE);
+                tv_isbn.setVisibility(View.GONE);
                 tv_name.setVisibility(View.VISIBLE);
                 tv_surname.setVisibility(View.VISIBLE);
                 tv_date.setVisibility(View.VISIBLE);
@@ -70,6 +79,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
                 tv_category.setVisibility(View.VISIBLE);
+                tv_isbn.setVisibility(View.VISIBLE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
@@ -78,6 +88,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
             case (2):
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
+                tv_isbn.setVisibility(View.GONE);
                 tv_category.setVisibility(View.VISIBLE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
@@ -88,6 +99,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
                 tv_category.setVisibility(View.VISIBLE);
+                tv_isbn.setVisibility(View.GONE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
@@ -102,6 +114,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_title.setVisibility(View.GONE);
         tv_author.setVisibility(View.GONE);
         tv_category.setVisibility(View.GONE);
+        tv_isbn.setVisibility(View.GONE);
         tv_name.setVisibility(View.GONE);
         tv_surname.setVisibility(View.GONE);
         tv_date.setVisibility(View.GONE);
@@ -119,30 +132,109 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         switch (selected){
             case (0):
                 //creare extraActivity
-                // necessario per fare il parsing della data
-                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-                df.setLenient(false);
-                GregorianCalendar date = new GregorianCalendar();
-                try {
-                    date.setTime(df.parse(tv_date.getText().toString()));
-                } catch (ParseException e) {
-                    tv_date.setError("Date format not valid! [dd/MM/yyyy]");
+                if (tv_title.length()==0){
+                    tv_title.setError("Insert title!");
+                } else if (tv_name.length()==0){
+                    tv_name.setError("Insert name!");
+                } else if (tv_surname.length()==0){
+                    tv_surname.setError("Insert surname!");
+                } else {
+                    // necessario per fare il parsing della data
+                    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    df.setLenient(false);
+                    GregorianCalendar date = new GregorianCalendar();
+                    try {
+                        date.setTime(df.parse(tv_date.getText().toString()));
+                    } catch (ParseException e) {
+                        tv_date.setError(getString(R.string.dateformat_error));
+                    }
+                    ExtraActivity ea = new ExtraActivity(tv_title.getText().toString(), tv_name.getText().toString(), tv_surname.getText().toString(), date.getTimeInMillis());
+                    myRef = database.getReference("activities");
+                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(ea);
+                    clearTextView();
+                    clearErrorTv();
+                    Toast.makeText(this, getString(R.string.new_activity), Toast.LENGTH_LONG).show();
                 }
-                model.newActivity(tv_title.getText().toString(), tv_name.getText().toString(), tv_surname.getText().toString(), date);
-
-
                 break;
             case(1):
                 //creare libro
+                if (tv_title.length()==0){
+                    tv_title.setError("Insert title!");
+                } else if (tv_author.length()==0){
+                    tv_author.setError("Insert author!");
+                } else if (tv_category.length()==0) {
+                    tv_category.setError("Insert category!");
+                }else if(tv_isbn.length()==0){
+                    tv_isbn.setError("Inser ISBN!");
+                } else{
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.BOOK,tv_isbn.getText().toString());
+                    myRef = database.getReference("objects");
+                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(libraryObject);
+                    clearTextView();
+                    clearErrorTv();
+                    Toast.makeText(this, getString(R.string.new_book), Toast.LENGTH_LONG).show();
+                }
+
+
                 break;
             case(2):
                 //Creare music
+                if (tv_title.length()==0){
+                    tv_title.setError("Insert title!");
+                } else if (tv_author.length()==0){
+                    tv_author.setError("Insert author!");
+                } else if (tv_category.length()==0) {
+                    tv_category.setError("Insert category!");
+                } else {
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.MUSIC);
+                    myRef = database.getReference("objects");
+                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(libraryObject);
+                    clearTextView();
+                    clearErrorTv();
+                    Toast.makeText(this, getString(R.string.new_music), Toast.LENGTH_LONG).show();
+                }
+
+
                 break;
             case(3):
                 //creare film
+                if (tv_title.length()==0){
+                    tv_title.setError("Insert title!");
+                } else if (tv_author.length()==0){
+                    tv_author.setError("Insert author!");
+                } else if (tv_category.length()==0) {
+                    tv_category.setError("Insert category!");
+                } else {
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM);
+                    myRef = database.getReference("objects");
+                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(libraryObject);
+                    clearTextView();
+                    clearErrorTv();
+                    Toast.makeText(this, getString(R.string.new_film), Toast.LENGTH_LONG).show();
+                }
                 break;
             default:
-                Toast.makeText(this, "You must select a type!", Toast.LENGTH_LONG);
+                Toast.makeText(this, getString(R.string.no_type_selected), Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void clearTextView() {
+        tv_title.setText("");
+        tv_author.setText("");
+        tv_category.setText("");
+        tv_isbn.setText("");
+        tv_name.setText("");
+        tv_surname.setText("");
+        tv_date.setText("");
+    }
+
+    private void clearErrorTv(){
+        tv_title.setError(null);
+        tv_author.setError(null);
+        tv_category.setError(null);
+        tv_isbn.setError(null);
+        tv_name.setError(null);
+        tv_surname.setError(null);
+        tv_date.setError(null);
     }
 }

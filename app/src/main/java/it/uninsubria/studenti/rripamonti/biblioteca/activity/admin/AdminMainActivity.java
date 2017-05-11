@@ -9,22 +9,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
+import com.google.firebase.auth.FirebaseAuth;
 
-import it.uninsubria.studenti.rripamonti.biblioteca.activity.LoginActivity;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.FirebaseLoginActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
-import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
-import it.uninsubria.studenti.rripamonti.biblioteca.model.recycler.AdminRecyclerAdapter;
 
 public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
     private static final String TAG ="AdminMainActivity";
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private ArrayList<LibraryObject> items = new ArrayList<LibraryObject>();
-    private ArrayAdapter<LibraryObject> arrayAdapter;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,11 +30,9 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
         getSupportActionBar().setLogo(R.drawable.logo);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         myToolbar.setOnMenuItemClickListener(this);
-        recyclerView = (RecyclerView) findViewById(R.id.adminRecyclerView);
-        linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new AdminRecyclerAdapter(items);
-        recyclerView.setAdapter(adapter);
+
+
+
     }
 
     @Override
@@ -48,26 +42,31 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
     public boolean onMenuItemClick(MenuItem item) {
         Intent intent;
         switch (item.getItemId()) {
             case R.id.action_logout:
                 Log.d(TAG,"action LOGOUT has clicked");
-                intent = new Intent(getApplicationContext(), LoginActivity.class);
+                FirebaseAuth.getInstance().signOut();
+                intent = new Intent(getApplicationContext(), FirebaseLoginActivity.class);
                 startActivity(intent);
                 finish();
                 return true;
             case R.id.action_settings:
                 Log.d(TAG,"action SETTING has clicked");
-                intent = new Intent(getApplicationContext(), ManageLoanActivity.class);
-                startActivity(intent);
+
 
                 return true;
             case R.id.action_help:
                 Log.d(TAG,"action HELP has clicked");
                 return true;
             case R.id.action_add:
-                Log.d(TAG,"action SEARCH has clicked");
+                Log.d(TAG,"action ADD has clicked");
                 intent = new Intent(getApplicationContext(), AddObjectActivity.class);
                 startActivity(intent);
                 return true;
