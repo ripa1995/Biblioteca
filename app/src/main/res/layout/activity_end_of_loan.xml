@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_search"
+    android:id="@+id/activity_end_of_loan"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".activity.user.SearchActivity">
+    tools:context="it.uninsubria.studenti.rripamonti.biblioteca.activity.admin.EndOfLoan">
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="@string/insert_title_here"
+                android:hint="@string/insert_userid"
                 android:ems="10"
                 android:id="@+id/et_search"
                 android:layout_weight="1" />
@@ -48,6 +48,5 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:id="@+id/search_recyclerview"/>
-
-    </LinearLayout>
+</LinearLayout>
 </LinearLayout>

@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Name"
+            android:hint="@string/name"
             android:ems="10"
             android:id="@+id/et_name" />
 
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:hint="Surname"
+            android:hint="@string/surname"
             android:ems="10"
             android:id="@+id/et_surname" />
 
@@ -60,19 +60,19 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/password"
             android:id="@+id/et_password" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="Valid Email"
+            android:hint="@string/valid_email"
             android:ems="10"
             android:id="@+id/et_email" />
 
         <Button
-            android:text="Confirm"
+            android:text="@string/confirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_confirm_registration"

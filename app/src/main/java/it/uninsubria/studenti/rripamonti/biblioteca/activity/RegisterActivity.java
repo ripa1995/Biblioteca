@@ -178,9 +178,11 @@ public class RegisterActivity extends AppCompatActivity {
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 ref = FirebaseDatabase.getInstance().getReference();
                                 Map<String, String> map = new HashMap<>();
+                                map.put("Id",user.getUid());
                                 map.put("Name",name.toString());
                                 map.put("Surname", surname.toString());
                                 map.put("Admin", "false");
+
                                 ref.child("users").child(user.getUid()).setValue(map);
                                 finish();
 
@@ -192,7 +194,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 showProgress(false);
                                 if (task.getException() instanceof FirebaseNetworkException) {
-                                    Toast toast = Toast.makeText(getApplicationContext(),"No internet connection",Toast.LENGTH_LONG);
+                                    Toast toast = Toast.makeText(getApplicationContext(),getString(R.string.no_internet),Toast.LENGTH_LONG);
                                     toast.show();
                                 } else {
                                     mEmail.setText("");

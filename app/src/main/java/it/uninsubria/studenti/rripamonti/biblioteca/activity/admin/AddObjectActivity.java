@@ -126,19 +126,58 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         finish();
         return true;
     }
+    private boolean areActivityEditTextNotEmpty(){
+        if (tv_title.length()==0){
+            tv_title.setError(getString(R.string.insert_title));
+            return false;
+        } else if (tv_name.length()==0){
+            tv_name.setError(getString(R.string.insert_name));
+            return false;
+        } else if (tv_surname.length()==0) {
+            tv_surname.setError(getString(R.string.insert_surname));
+            return false;
+        } else {
+            return true;
+    }}
 
+    private boolean areBookEditTextNotEmpty(){
+        if (tv_title.length()==0){
+            tv_title.setError(getString(R.string.insert_title));
+            return false;
+        } else if (tv_author.length()==0){
+            tv_author.setError(getString(R.string.insert_author));
+            return false;
+        } else if (tv_category.length()==0) {
+            tv_category.setError(getString(R.string.insert_category));
+            return false;
+        }else if(tv_isbn.length()==0) {
+            tv_isbn.setError(getString(R.string.insert_isbn));
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean areObjectEditTextNotEmpty(){
+        if (tv_title.length()==0){
+            tv_title.setError(getString(R.string.insert_title));
+            return false;
+        } else if (tv_author.length()==0){
+            tv_author.setError(getString(R.string.insert_author));
+            return false;
+        } else if (tv_category.length()==0) {
+            tv_category.setError(getString(R.string.insert_category));
+            return false;
+        }else {
+            return true;
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (selected){
             case (0):
                 //creare extraActivity
-                if (tv_title.length()==0){
-                    tv_title.setError("Insert title!");
-                } else if (tv_name.length()==0){
-                    tv_name.setError("Insert name!");
-                } else if (tv_surname.length()==0){
-                    tv_surname.setError("Insert surname!");
-                } else {
+                if (areActivityEditTextNotEmpty()) {
                     // necessario per fare il parsing della data
                     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
                     df.setLenient(false);
@@ -158,18 +197,12 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 break;
             case(1):
                 //creare libro
-                if (tv_title.length()==0){
-                    tv_title.setError("Insert title!");
-                } else if (tv_author.length()==0){
-                    tv_author.setError("Insert author!");
-                } else if (tv_category.length()==0) {
-                    tv_category.setError("Insert category!");
-                }else if(tv_isbn.length()==0){
-                    tv_isbn.setError("Inser ISBN!");
-                } else{
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.BOOK,tv_isbn.getText().toString());
+
+                if (areBookEditTextNotEmpty()){
+                    String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.BOOK,tv_isbn.getText().toString(), id);
                     myRef = database.getReference("objects");
-                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(libraryObject);
+                    myRef.child(id).setValue(libraryObject);
                     clearTextView();
                     clearErrorTv();
                     Toast.makeText(this, getString(R.string.new_book), Toast.LENGTH_LONG).show();
@@ -179,16 +212,12 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 break;
             case(2):
                 //Creare music
-                if (tv_title.length()==0){
-                    tv_title.setError("Insert title!");
-                } else if (tv_author.length()==0){
-                    tv_author.setError("Insert author!");
-                } else if (tv_category.length()==0) {
-                    tv_category.setError("Insert category!");
-                } else {
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.MUSIC);
+
+                if(areObjectEditTextNotEmpty()){
+                    String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.MUSIC, id);
                     myRef = database.getReference("objects");
-                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(libraryObject);
+                    myRef.child(id).setValue(libraryObject);
                     clearTextView();
                     clearErrorTv();
                     Toast.makeText(this, getString(R.string.new_music), Toast.LENGTH_LONG).show();
@@ -198,16 +227,11 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 break;
             case(3):
                 //creare film
-                if (tv_title.length()==0){
-                    tv_title.setError("Insert title!");
-                } else if (tv_author.length()==0){
-                    tv_author.setError("Insert author!");
-                } else if (tv_category.length()==0) {
-                    tv_category.setError("Insert category!");
-                } else {
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM);
+                if(areBookEditTextNotEmpty()) {
+                    String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM, id);
                     myRef = database.getReference("objects");
-                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(libraryObject);
+                    myRef.child(id).setValue(libraryObject);
                     clearTextView();
                     clearErrorTv();
                     Toast.makeText(this, getString(R.string.new_film), Toast.LENGTH_LONG).show();

@@ -150,9 +150,9 @@ public class UserTabbedActivity extends AppCompatActivity implements Toolbar.OnM
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "New objects";
+                    return getString(R.string.new_objects);
                 case 1:
-                    return "Coming soon events";
+                    return getString(R.string.coming_events);
             }
             return null;
         }

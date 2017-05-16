@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">Biblioteca</string>
+
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_login">Accedi</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (opzionale)</string>
+    <string name="action_sign_in">Accedi o registrati</string>
+    <string name="action_sign_in_short">Accedi</string>
+    <string name="error_invalid_email">Indirizzo email non valido</string>
+    <string name="error_invalid_password">Password troppo corta</string>
+    <string name="error_incorrect_password">Password errata</string>
+    <string name="error_field_required">Campo richiesto</string>
+
+    <string name="register">Registrati</string>
+    <string name="log_in">Accedi</string>
+    <string name="email_used">Errore: email già in uso</string>
+    <string-array name="types">
+        <item>Attività extra</item>
+        <item>Libro</item>
+        <item>Musica</item>
+        <item>Film</item>
+    </string-array>
+    <string name="title_activity_user_tabbed">UserTabbedActivity</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="obj_not_found">Oggetto non trovato!</string>
+    <string name="loan_request_failed">Prestito già richiesto per questo oggetto!</string>
+    <string name="loan_requested_successfully">Prestito richiesto con successo!</string>
+    <string name="loan_not_started">Prestito non iniziato!</string>
+    <string name="user_data">Dati utente:</string>
+    <string name="loan_accepted">Prestito accettato!</string>
+    <string name="error">Errore!</string>
+    <string name="loan_accept">Prestito accettato!</string>
+    <string name="loan_refuse">Prestito rifiutato!</string>
+    <string name="new_film">Film aggiunto!</string>
+    <string name="new_music">Musica aggiunta!</string>
+    <string name="new_book">Libro aggiunto!</string>
+    <string name="new_activity">Attività aggiunta!</string>
+    <string name="dateformat_error">Formato data non valido! [dd/MM/yyyy]</string>
+    <string name="no_type_selected">Devi selezionare il tipo!</string>
+    <string name="title_activity_firebase_login">Accedi</string>
+    <string name="insert_title_error">Inserire il titolo QUI!</string>
+    <string name="object_not_found">Oggetto non trovato!</string>
+    <string name="title_activity_test">Test</string>
+    <string name="password">Password</string>
+    <string name="detail">Dettagli</string>
+    <string name="coming_soon_activities">Prossime attività</string>
+    <string name="no_internet">Non connesso a Internet</string>
+    <string name="insert_title">Inserire il titolo!</string>
+    <string name="insert_name">Inserire il nome!</string>
+    <string name="insert_surname">Inserire il cognome!</string>
+    <string name="insert_author">Inserire autore!</string>
+    <string name="insert_category">Inserire la categoria!</string>
+    <string name="insert_isbn">Inserire il codice ISBN!</string>
+    <string name="new_objects">Nuovi oggetti</string>
+    <string name="coming_events">Prossimi eventi</string>
+    <string name="type">Tipo:</string>
+    <string name="title">Titolo</string>
+    <string name="author">Autore</string>
+    <string name="isbn">ISBN</string>
+    <string name="category">Categoria</string>
+    <string name="name">Nome</string>
+    <string name="surname">Cognome</string>
+    <string name="date">Data</string>
+    <string name="valid_email">Email valida</string>
+    <string name="demand_loan">Richiedi prestito</string>
+    <string name="insert_title_here">Inserire il titolo QUI!</string>
+    <string name="search">Cerca</string>
+    <string name="settings">Impostazioni</string>
+    <string name="help">Aiuto</string>
+    <string name="add">Aggiungi..</string>
+    <string name="log_out">Disconnetti</string>
+    <string name="loan_status">Stato prestiti</string>
+    <string name="confirm">Conferma</string>
+    <string name="not_start">Not started</string>
+    <string name="insert_loan_id">Insert loan id!</string>
+    <string name="insertloan_id">Insert loan id</string>
+    <string name="insert_userid">Insert user id</string>
+    <string name="end_loan">End loan</string>
+</resources>

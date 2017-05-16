@@ -13,26 +13,29 @@ public class LibraryObject implements Serializable{
     private String title, author, isbn;
     private String category;
     private Type type;
+    private String id;
 
 
     private boolean available = false;
 
     public LibraryObject(){
-
+        id = null;
         title = null;
         author = null;
         category = null;
         type = null;
     }
 
-    public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType){
+    public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mid){
+        id = mid;
         isbn ="0";
         title = mTitle;
         author = mAuthor;
         category = mCategory;
         type = mType;
     }
-    public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mIsbn){
+    public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mIsbn, String mid){
+        id = mid;
         isbn =mIsbn;
         title = mTitle;
         author = mAuthor;
@@ -40,7 +43,13 @@ public class LibraryObject implements Serializable{
         type = mType;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

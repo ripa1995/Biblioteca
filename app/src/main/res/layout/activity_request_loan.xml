@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context=".activity.user.RequestLoanActivity">
+    tools:context=".activity.user.RequestLoan">
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
@@ -45,25 +45,25 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:text="Title"
+                android:text="@string/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_title"
                 android:textStyle="bold"/>
 
             <TextView
-                android:text="Author"
+                android:text="@string/author"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_author" />
             <TextView
-                android:text="ISBN"
+                android:text="@string/isbn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_isbn" />
 
             <TextView
-                android:text="Category"
+                android:text="@string/category"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tv_category" />
@@ -72,7 +72,7 @@
     </LinearLayout>
 
     <Button
-        android:text="Demand loan"
+        android:text="@string/demand_loan"
         android:layout_width="191dp"
         android:layout_height="wrap_content"
         android:id="@+id/btn_loan"

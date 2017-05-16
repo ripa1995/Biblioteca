@@ -124,7 +124,7 @@ public class FirebaseLoginActivity extends AppCompatActivity{
     }
 
     private void register() {
-        //start activity register
+        //setStart activity register
         Intent intent = new Intent(this.getApplicationContext(), RegisterActivity.class);
         startActivity(intent);
     }
@@ -227,17 +227,17 @@ public class FirebaseLoginActivity extends AppCompatActivity{
                                     showProgress(false);
 
                                     if (task.getException() instanceof FirebaseNetworkException) {
-                                        Toast toast = Toast.makeText(getApplicationContext(),"No internet connection",Toast.LENGTH_LONG);
+                                        Toast toast = Toast.makeText(getApplicationContext(),getString(R.string.no_internet),Toast.LENGTH_LONG);
                                         toast.show();
                                     } else if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                         mEmailView.setText("");
                                         mPasswordView.setText("");
-                                        mPasswordView.setError("Error: password is not correct");
+                                        mPasswordView.setError(getString(R.string.error_incorrect_password));
                                         mEmailView.requestFocus();
                                     } else if (task.getException() instanceof FirebaseAuthInvalidUserException) {
                                         mEmailView.setText("");
                                         mPasswordView.setText("");
-                                        mEmailView.setError("Error: email is not correct");
+                                        mEmailView.setError(getString(R.string.error_invalid_email));
                                         mEmailView.requestFocus();
                                     }
 

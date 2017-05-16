@@ -3,6 +3,7 @@
     package="it.uninsubria.studenti.rripamonti.biblioteca">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
@@ -14,12 +15,10 @@
         android:icon="@mipmap/splash"
         android:label="@string/app_name"
         android:supportsRtl="true"
-
-
         android:theme="@style/AppTheme">
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.SplashScreen"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,41 +27,61 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.FirebaseLoginActivity"
-            android:label="@string/title_activity_login" />
+            android:label="@string/title_activity_login"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.RegisterActivity"
-            android:label="@string/register" />
+            android:label="@string/register"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.user.SearchActivity"
-            android:label="Search" />
+            android:label="Search"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.user.LoanStatusActivity"
-            android:label="Loan Status" />
+            android:label="Loan Status"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.user.RequestLoan"
-            android:label="Request Loan" />
+            android:label="Request Loan"
+            android:screenOrientation="portrait" />
         <activity
-            android:screenOrientation="portrait"
             android:name=".activity.admin.AdminMainActivity"
-            android:label="New Loan Request">
+            android:label="New Loan Request"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.admin.AddObjectActivity"
-            android:screenOrientation="portrait"/>
         <activity
-            android:screenOrientation="portrait"
+            android:name=".activity.admin.AddObjectActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activity.user.UserTabbedActivity"
             android:label="@string/app_name"
-             />
-        <activity android:name=".activity.LauncherTest"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.user.ObjectDetail"
+            android:label="@string/detail"
+            android:screenOrientation="portrait" />
+
+        <!--
+     Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_action_book" />
+        <!--
+             Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <activity android:name=".activity.admin.EndOfLoan"></activity>
     </application>
 
 </manifest>

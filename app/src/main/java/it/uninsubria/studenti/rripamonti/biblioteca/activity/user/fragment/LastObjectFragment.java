@@ -1,5 +1,6 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.activity.user.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
+
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.ObjectDetail;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 
 
@@ -24,7 +28,7 @@ public class LastObjectFragment extends Fragment {
     private static final String TAG = "LastObjectFragment";
     private RecyclerView.LayoutManager layoutManager;
     private RecyclerView recyclerView;
-
+    private static ArrayList<LibraryObject> items = new ArrayList<LibraryObject>();
     FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder> adapter;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref = database.getReference("objects");
@@ -34,11 +38,12 @@ public class LastObjectFragment extends Fragment {
         ImageView mItemImage;
         TextView mItemAuthor;
         TextView mItemTitle;
-
+        View mView;
 
 
         public LibraryObjectHolder(View v){
             super(v);
+            mView = v;
             mItemImage = (ImageView) v.findViewById(R.id.item_image);
             mItemAuthor = (TextView) v.findViewById(R.id.item_author);
             mItemTitle = (TextView) v.findViewById(R.id.item_title);
@@ -76,7 +81,7 @@ public class LastObjectFragment extends Fragment {
         Query myRef = ref.limitToLast(25);
         adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row,LibraryObjectHolder.class, myRef) {
             @Override
-            protected void populateViewHolder(LibraryObjectHolder viewHolder, LibraryObject model, int position) {
+            protected void populateViewHolder(LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
                 switch (model.getType().toString()){
                     case "BOOK":
                         //immagine libro
@@ -89,10 +94,24 @@ public class LastObjectFragment extends Fragment {
                         viewHolder.mItemImage.setImageResource(R.drawable.ic_action_music_1);
                         break;
                 }
-
+                items.add(position, model);
                 viewHolder.mItemTitle.setText(model.getTitle());
                 viewHolder.mItemAuthor.setText(model.getAuthor());
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        LibraryObject lo = items.get(position);
+
+                        Intent intent = new Intent(v.getContext(),ObjectDetail.class);
+                        Bundle extras = new Bundle();
+                        extras.putSerializable("key",lo);
+                        intent.putExtras(extras);
+                        v.getContext().startActivity(intent);
+                    }
+                });
             }
+
         };
         recyclerView.setAdapter(adapter);
 

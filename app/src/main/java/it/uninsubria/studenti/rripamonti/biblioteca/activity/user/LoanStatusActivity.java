@@ -34,7 +34,7 @@ public class LoanStatusActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     FirebaseRecyclerAdapter<Loan, LoanItemHolder> adapter;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference myRef = database.getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("loans");
+    private DatabaseReference ref = database.getReference("loans");
     public static class LoanItemHolder extends RecyclerView.ViewHolder {
 
         private ImageView itemImage;
@@ -64,12 +64,13 @@ public class LoanStatusActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.loanstatus_recycler);
         linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
+        Query myRef = ref.orderByChild("userId").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         myRef.keepSynced(true);
 
         adapter = new FirebaseRecyclerAdapter<Loan, LoanItemHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanItemHolder.class, myRef) {
             @Override
             protected void populateViewHolder(LoanItemHolder viewHolder, Loan model, int position) {
-                switch (model.getLibraryObject().getType().toString()) {
+                switch (model.getTipo().toString()) {
                     case "BOOK":
                         //immagine libro
                         viewHolder.itemImage.setImageResource(R.drawable.ic_action_book);
@@ -82,19 +83,29 @@ public class LoanStatusActivity extends AppCompatActivity {
                         break;
                 }
                 Log.d("prova", model.toString());
-                viewHolder.tvTitle.setText(model.getLibraryObject().getTitle());
-                String startDate = new SimpleDateFormat("dd/MM/yyyy").format(model.getStart_date());
-                viewHolder.tvStartOfLoan.setText(startDate);
-                GregorianCalendar endDate = new GregorianCalendar();
-                endDate.setTimeInMillis(model.getStart_date());
-                endDate.add(Calendar.MONTH, 1);
-                String endOfLoan = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getTime());
-                viewHolder.tvEndOfLoan.setText(endOfLoan);
-                GregorianCalendar gregorianCalendar = new GregorianCalendar();
-                //se è passato un mese
-                if (endDate.getTimeInMillis() < gregorianCalendar.getTimeInMillis()) {
-                    viewHolder.tvEndOfLoan.setTextColor(Color.RED);
+                viewHolder.tvTitle.setText(model.getTitle());
+                Log.d(TAG, String.valueOf(model.isStart()));
+                if (model.isStart()) {
+                    String startDate = new SimpleDateFormat("dd/MM/yyyy").format(model.getStart_date());
+                    viewHolder.tvStartOfLoan.setText(startDate);
+                    GregorianCalendar endDate = new GregorianCalendar();
+                    endDate.setTimeInMillis(model.getStart_date());
+
+                    endDate.add(Calendar.MONTH, 1);
+                    String endOfLoan = new SimpleDateFormat("dd/MM/yyyy").format(endDate.getTime());
+                    viewHolder.tvEndOfLoan.setText(endOfLoan);
+                    GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                    //se è passato un mese
+                    if (endDate.getTimeInMillis() < gregorianCalendar.getTimeInMillis()) {
+                        viewHolder.tvEndOfLoan.setTextColor(Color.RED);
+                    }
+
+                } else {
+                    viewHolder.tvStartOfLoan.setText(getString(R.string.not_start));
+                    viewHolder.tvEndOfLoan.setText(null);
                 }
+
+
 
             }
         };

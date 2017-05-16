@@ -13,17 +13,26 @@ public class ExtraActivity {
     private long date;
 
     public ExtraActivity(){
-        title = null;
+        date = 0;
         name = null;
         surname = null;
-        date = 0;
+
+        title = null;
     }
 
     public ExtraActivity(String mTitle, String mName, String mSurname, long mDate){
+        date = mDate;
         title = mTitle;
         name = mName;
         surname = mSurname;
+
+    }
+    public ExtraActivity(long mDate, String mName, String mSurname,String mTitle ){
         date = mDate;
+        title = mTitle;
+        name = mName;
+        surname = mSurname;
+
     }
 
 
