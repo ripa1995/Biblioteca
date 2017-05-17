@@ -10,14 +10,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -25,6 +26,7 @@ import java.util.GregorianCalendar;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.FirebaseLoginActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LoanHolder;
 
 public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
     private static final String TAG ="AdminMainActivity";
@@ -77,8 +79,57 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
-                        database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                        final Query query = database.getReference("loans").orderByChild("libraryObjectId").equalTo(model.getLibraryObjectId());
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.getChildrenCount()==1){
+                                    Log.d(TAG,dataSnapshot.toString());
+                                    database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                    database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                                }
+                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                    Loan loan1 = childSnapshot.getValue(Loan.class);
+                                    if (!loan1.getIdLoan().equals(model.getIdLoan())) {
+                                        Query query1 = database.getReference("loans/" + loan1.getIdLoan()).child("start");
+                                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            int counter = 0;
+
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                if (dataSnapshot.getValue()==null){
+                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                                                } else if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
+                                                    //oggetto in prestito
+                                                    counter++;
+                                                    Log.d(TAG, counter + "");
+                                                    Log.d(TAG, dataSnapshot.getValue().toString());
+
+                                                } else {
+                                                    if (counter == 0) {
+                                                        database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                                        database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
                 });
 

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LibraryObjectHolder;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SearchActivity";
@@ -36,23 +37,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private Button btn_search;
     private EditText et_search;
 
-    public static class LibraryObjectHolder extends RecyclerView.ViewHolder {
-        ImageView mItemImage;
-        TextView mItemAuthor;
-        TextView mItemTitle;
-        View mView;
 
-
-        public LibraryObjectHolder(View v){
-            super(v);
-            mView = v;
-            mItemImage = (ImageView) v.findViewById(R.id.item_image);
-            mItemAuthor = (TextView) v.findViewById(R.id.item_author);
-            mItemTitle = (TextView) v.findViewById(R.id.item_title);
-
-        }
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

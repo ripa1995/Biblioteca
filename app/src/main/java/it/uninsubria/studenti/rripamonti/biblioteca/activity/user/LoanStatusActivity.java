@@ -27,31 +27,16 @@ import java.util.GregorianCalendar;
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LoanStatusHolder;
 
 public class LoanStatusActivity extends AppCompatActivity {
     private static final String TAG = "LoanStatusActivity";
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
-    FirebaseRecyclerAdapter<Loan, LoanItemHolder> adapter;
+    FirebaseRecyclerAdapter<Loan, LoanStatusHolder> adapter;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref = database.getReference("loans");
-    public static class LoanItemHolder extends RecyclerView.ViewHolder {
 
-        private ImageView itemImage;
-        private TextView tvStartOfLoan;
-        private TextView tvEndOfLoan;
-        private TextView tvTitle;
-        private LibraryObject mLibraryItem = new LibraryObject();
-
-        public LoanItemHolder(View v) {
-            super(v);
-            itemImage = (ImageView) v.findViewById(R.id.item_image);
-            tvTitle = (TextView) v.findViewById(R.id.item_title);
-            tvStartOfLoan = (TextView) v.findViewById(R.id.item_dateOfLoan);
-            tvEndOfLoan = (TextView) v.findViewById(R.id.item_endOfLoan);
-
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +52,9 @@ public class LoanStatusActivity extends AppCompatActivity {
         Query myRef = ref.orderByChild("userId").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         myRef.keepSynced(true);
 
-        adapter = new FirebaseRecyclerAdapter<Loan, LoanItemHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanItemHolder.class, myRef) {
+        adapter = new FirebaseRecyclerAdapter<Loan, LoanStatusHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanStatusHolder.class, myRef) {
             @Override
-            protected void populateViewHolder(LoanItemHolder viewHolder, Loan model, int position) {
+            protected void populateViewHolder(LoanStatusHolder viewHolder, Loan model, int position) {
                 switch (model.getTipo().toString()) {
                     case "BOOK":
                         //immagine libro

@@ -227,7 +227,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 break;
             case(3):
                 //creare film
-                if(areBookEditTextNotEmpty()) {
+                if(areObjectEditTextNotEmpty()) {
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
                     LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM, id);
                     myRef = database.getReference("objects");

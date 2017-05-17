@@ -30,6 +30,7 @@ import java.util.GregorianCalendar;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.ExtraActivity;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.ActivitiesHolder;
 
 
 public class LastExtraActivitiesFragment extends Fragment {
@@ -45,20 +46,7 @@ public class LastExtraActivitiesFragment extends Fragment {
     private GregorianCalendar gc = new GregorianCalendar();
     private ExtraActivity ea;
 
-    public static class ActivitiesHolder extends RecyclerView.ViewHolder {
-        private ImageView mItemImage;
-        private TextView mItemAuthor;
-        private TextView mItemTitle;
 
-
-
-        public ActivitiesHolder(View v){
-            super(v);
-            mItemImage = (ImageView) v.findViewById(R.id.item_image);
-            mItemAuthor = (TextView) v.findViewById(R.id.item_author);
-            mItemTitle = (TextView) v.findViewById(R.id.item_title);
-        }
-    }
 
 
     public LastExtraActivitiesFragment() {

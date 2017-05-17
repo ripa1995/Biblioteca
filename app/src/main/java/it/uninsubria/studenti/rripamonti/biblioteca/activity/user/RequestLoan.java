@@ -95,28 +95,32 @@ public class RequestLoan extends AppCompatActivity {
                             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                                 Loan loan1 = childSnapshot.getValue(Loan.class);
                                 Log.d(TAG, String.valueOf(loan1.getIdLoan()));
-
-                                Query ref3 = database.getReference("loans/"+loan1.getIdLoan()).child("start");
-                                ref3.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
-                                        Log.d(TAG,dataSnapshot.toString());
-                                        if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
-                                            //oggetto in prestito
-                                            Log.d(TAG, dataSnapshot.getValue().toString());
-                                            failure.setVisibility(View.VISIBLE);
-                                        } else {
-                                            //oggetto non in prestito
-                                            Log.d(TAG, "null");
-                                            insertLoan();
+                                if (loan1.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                                    failure.setVisibility(View.VISIBLE);
+                                    break;
+                                } else {
+                                    Query ref3 = database.getReference("loans/" + loan1.getIdLoan()).child("start");
+                                    ref3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
+                                            Log.d(TAG, dataSnapshot.toString());
+                                            if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
+                                                //oggetto in prestito
+                                                Log.d(TAG, dataSnapshot.getValue().toString());
+                                                failure.setVisibility(View.VISIBLE);
+                                            } else {
+                                                //oggetto non in prestito
+                                                Log.d(TAG, "null");
+                                                insertLoan();
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
 
-                                    }
-                                });
+                                        }
+                                    });
+                                }
                             }
                         }
                     }

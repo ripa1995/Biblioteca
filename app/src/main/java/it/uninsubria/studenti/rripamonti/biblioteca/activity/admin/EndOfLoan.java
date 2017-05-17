@@ -15,17 +15,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LoanHolder;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LoanStatusHolder;
 
 public class EndOfLoan extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SearchActivity";
     private LinearLayoutManager linearLayoutManager;
     private RecyclerView recyclerView;
-    FirebaseRecyclerAdapter<Loan, LoanHolder> adapter;
+    FirebaseRecyclerAdapter<Loan, LoanStatusHolder> adapter;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("loans");
     private static ArrayList<Loan> items = new ArrayList<Loan>();
@@ -69,27 +71,32 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
         } else {
             Query ref = myRef.orderByChild("userId").startAt(id).endAt(id+"\uF8FF");
 
-            adapter = new FirebaseRecyclerAdapter<Loan, LoanHolder>(Loan.class, R.layout.recyclerview_item_row, LoanHolder.class, ref) {
+            adapter = new FirebaseRecyclerAdapter<Loan, LoanStatusHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanStatusHolder.class, ref) {
                 @Override
-                protected void populateViewHolder(LoanHolder viewHolder, final Loan model, final int position) {
+                protected void populateViewHolder(LoanStatusHolder viewHolder, final Loan model, final int position) {
                     switch (model.getTipo().toString()) {
                         case "BOOK":
                             //immagine libro
-                            viewHolder.mItemImage.setImageResource(R.drawable.ic_action_book);
+                            viewHolder.itemImage.setImageResource(R.drawable.ic_action_book);
 
                             break;
                         case "FILM":
-                            viewHolder.mItemImage.setImageResource(R.drawable.ic_action_movie);
+                            viewHolder.itemImage.setImageResource(R.drawable.ic_action_movie);
 
                             break;
                         case "MUSIC":
-                            viewHolder.mItemImage.setImageResource(R.drawable.ic_action_music_1);
+                            viewHolder.itemImage.setImageResource(R.drawable.ic_action_music_1);
 
                             break;
                     }
                     items.add(position, model);
-                    viewHolder.mItemTitle.setText(model.getTitle());
-                    viewHolder.mItemAuthor.setText(model.getUserId());
+                    viewHolder.tvTitle.setText(model.getTitle());
+                    viewHolder.tvStartOfLoan.setText(model.getUserId());
+                    if (model.isStart()){
+                        viewHolder.tvEndOfLoan.setText(new SimpleDateFormat("dd/MM/yyyy").format(model.getStart_date()));
+                    } else {
+                        viewHolder.tvEndOfLoan.setText(getString(R.string.not_started));
+                    }
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

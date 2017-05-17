@@ -1,4 +1,4 @@
-package it.uninsubria.studenti.rripamonti.biblioteca.activity.admin;
+package it.uninsubria.studenti.rripamonti.biblioteca.model.holder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,10 +12,10 @@ import it.uninsubria.studenti.rripamonti.biblioteca.R;
  */
 
 public class LoanHolder extends RecyclerView.ViewHolder {
-    ImageView mItemImage;
-    TextView mItemAuthor;
-    TextView mItemTitle;
-    View mView;
+    public ImageView mItemImage;
+    public TextView mItemAuthor;
+    public TextView mItemTitle;
+    public View mView;
 
 
     public LoanHolder(View v){

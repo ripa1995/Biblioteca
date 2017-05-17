@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.ObjectDetail;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LibraryObjectHolder;
 
 
 public class LastObjectFragment extends Fragment {
@@ -32,24 +33,6 @@ public class LastObjectFragment extends Fragment {
     FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder> adapter;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference ref = database.getReference("objects");
-
-
-    public static class LibraryObjectHolder extends RecyclerView.ViewHolder {
-        ImageView mItemImage;
-        TextView mItemAuthor;
-        TextView mItemTitle;
-        View mView;
-
-
-        public LibraryObjectHolder(View v){
-            super(v);
-            mView = v;
-            mItemImage = (ImageView) v.findViewById(R.id.item_image);
-            mItemAuthor = (TextView) v.findViewById(R.id.item_author);
-            mItemTitle = (TextView) v.findViewById(R.id.item_title);
-
-        }
-    }
 
     public LastObjectFragment() {
         // Required empty public constructor
