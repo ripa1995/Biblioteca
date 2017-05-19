@@ -18,16 +18,22 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LoanStatusHolder;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 public class LoanStatusActivity extends AppCompatActivity {
     private static final String TAG = "LoanStatusActivity";
@@ -54,17 +60,49 @@ public class LoanStatusActivity extends AppCompatActivity {
 
         adapter = new FirebaseRecyclerAdapter<Loan, LoanStatusHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanStatusHolder.class, myRef) {
             @Override
-            protected void populateViewHolder(LoanStatusHolder viewHolder, Loan model, int position) {
+            protected void populateViewHolder(final LoanStatusHolder viewHolder, Loan model, int position) {
                 switch (model.getTipo().toString()) {
                     case "BOOK":
                         //immagine libro
-                        viewHolder.itemImage.setImageResource(R.drawable.ic_action_book);
+
+                        Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+model.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(viewHolder.itemImage);
+
                         break;
                     case "FILM":
                         viewHolder.itemImage.setImageResource(R.drawable.ic_action_movie);
+                        MovieService.getInstance(getApplicationContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
+                            @Override
+                            public void onLoad(Movie movie) {
+                                if (movie != null) {
+                                    Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.itemImage);
+                                }
+                            }
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
                         break;
                     case "MUSIC":
                         viewHolder.itemImage.setImageResource(R.drawable.ic_action_music_1);
+                        AlbumService.getInstance(getApplicationContext()).getAlbum(model.getAuthor(), model.getTitle(), new AlbumService.Callback() {
+                            @Override
+                            public void onLoad(Album album) {
+                                if (album != null) {
+                                    List<Album.Image> list = album.getImages();
+                                    Log.d(TAG, album.getArtist());
+                                    for (Album.Image image : list) {
+                                        if (image.getSize().equals("medium")) {
+                                            Picasso.with(getApplicationContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(viewHolder.itemImage);
+                                        }
+                                    }
+
+                                }
+                            }
+                            @Override
+                            public void onFailure() {
+                            }
+                        });
                         break;
                 }
                 Log.d("prova", model.toString());

@@ -66,6 +66,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         // parent.getItemAtPosition(pos)
         switch (pos){
             case (0):
+                tv_title.setHint(getString(R.string.hint_title));
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.GONE);
                 tv_category.setVisibility(View.GONE);
@@ -76,6 +77,8 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 selected = 0;
                 break;
             case (1):
+                tv_title.setHint(getString(R.string.book_title));
+                tv_isbn.setHint("ISBN-13");
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
                 tv_category.setVisibility(View.VISIBLE);
@@ -86,6 +89,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 selected = 1;
                 break;
             case (2):
+                tv_title.setHint(getString(R.string.album_hint));
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
                 tv_isbn.setVisibility(View.GONE);
@@ -96,10 +100,12 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 selected = 2;
                 break;
             case (3):
+                tv_title.setHint(getString(R.string.film_hint));
+                tv_isbn.setHint("IMDb");
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
                 tv_category.setVisibility(View.VISIBLE);
-                tv_isbn.setVisibility(View.GONE);
+                tv_isbn.setVisibility(View.VISIBLE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
@@ -158,6 +164,23 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         }
     }
 
+    private boolean areFilmEditTextNotEmpty(){
+        if (tv_title.length()==0){
+            tv_title.setError(getString(R.string.insert_title));
+            return false;
+        } else if (tv_author.length()==0){
+            tv_author.setError(getString(R.string.insert_author));
+            return false;
+        } else if (tv_category.length()==0) {
+            tv_category.setError(getString(R.string.insert_category));
+            return false;
+        }else if(tv_isbn.length()==0) {
+            tv_isbn.setError(getString(R.string.insert_imdb));
+            return false;
+        }else {
+            return true;
+        }
+    }
     private boolean areObjectEditTextNotEmpty(){
         if (tv_title.length()==0){
             tv_title.setError(getString(R.string.insert_title));
@@ -214,8 +237,9 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 //Creare music
 
                 if(areObjectEditTextNotEmpty()){
+                    
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.MUSIC, id);
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.MUSIC,"0", id);
                     myRef = database.getReference("objects");
                     myRef.child(id).setValue(libraryObject);
                     clearTextView();
@@ -227,9 +251,10 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 break;
             case(3):
                 //creare film
-                if(areObjectEditTextNotEmpty()) {
+                if(areFilmEditTextNotEmpty()) {
+
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM, id);
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM,tv_isbn.getText().toString(), id);
                     myRef = database.getReference("objects");
                     myRef.child(id).setValue(libraryObject);
                     clearTextView();

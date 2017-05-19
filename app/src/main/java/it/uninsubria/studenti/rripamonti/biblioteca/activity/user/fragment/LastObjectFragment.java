@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +17,19 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.ObjectDetail;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LibraryObjectHolder;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 
 public class LastObjectFragment extends Fragment {
@@ -52,7 +59,7 @@ public class LastObjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_last_object, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_last_object, container, false);
 
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.objectsRecyclerView);
@@ -64,17 +71,47 @@ public class LastObjectFragment extends Fragment {
         Query myRef = ref.limitToLast(25);
         adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row,LibraryObjectHolder.class, myRef) {
             @Override
-            protected void populateViewHolder(LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
+            protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
                 switch (model.getType().toString()){
                     case "BOOK":
                         //immagine libro
-                        viewHolder.mItemImage.setImageResource(R.drawable.ic_action_book);
+                        Picasso.with(rootView.getContext()).load("http://covers.openlibrary.org/b/isbn/"+model.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(viewHolder.mItemImage);
                         break;
                     case "FILM":
                         viewHolder.mItemImage.setImageResource(R.drawable.ic_action_movie);
+                        MovieService.getInstance(rootView.getContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
+                            @Override
+                            public void onLoad(Movie movie) {
+                                if (movie != null) {
+                                    Picasso.with(rootView.getContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.mItemImage);
+                                }
+                            }
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
                         break;
                     case "MUSIC":
                         viewHolder.mItemImage.setImageResource(R.drawable.ic_action_music_1);
+                        AlbumService.getInstance(rootView.getContext()).getAlbum(model.getAuthor(), model.getTitle(), new AlbumService.Callback() {
+                            @Override
+                            public void onLoad(Album album) {
+                                if (album!=null) {
+                                    List<Album.Image> list = album.getImages();
+                                    Log.d(TAG, album.getArtist());
+                                    for (Album.Image image : list) {
+                                        if (image.getSize().equals("medium")) {
+                                            Picasso.with(rootView.getContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(viewHolder.mItemImage);
+                                        }
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure() {
+                            }
+                        });
                         break;
                 }
                 items.add(position, model);

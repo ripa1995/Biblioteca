@@ -18,13 +18,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 /**
  * Created by rober on 03/05/2017.
@@ -48,11 +54,12 @@ public class RequestLoan extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         Button btn_loan = (Button) findViewById(R.id.btn_loan);
-        ImageView mItemImage = (ImageView) findViewById(R.id.item_image);
+        final ImageView mItemImage = (ImageView) findViewById(R.id.item_image);
          mItemTitle = (TextView) findViewById(R.id.tv_title);
          mItemAuthor = (TextView) findViewById(R.id.tv_author);
          mItemCategory = (TextView) findViewById(R.id.tv_category);
          mItemISBN = (TextView) findViewById(R.id.tv_isbn);
+        mItemISBN.setVisibility(View.VISIBLE);
           success = (TextView) findViewById(R.id.tv_success);
           failure = (TextView) findViewById(R.id.tv_failure);
         Intent intent = getIntent();
@@ -63,20 +70,52 @@ public class RequestLoan extends AppCompatActivity {
         switch (lo.getType().toString()) {
             case "BOOK":
                 //immagine libro
-                mItemImage.setImageResource(R.drawable.ic_action_book);
-                mItemISBN.setText(lo.getIsbn());
-                mItemISBN.setVisibility(View.VISIBLE);
+
+
+                Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+lo.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(mItemImage);
+
                 break;
             case "FILM":
-                mItemImage.setImageResource(R.drawable.ic_action_movie);
-                mItemISBN.setVisibility(View.GONE);
+                MovieService.getInstance(getApplicationContext()).getMovie(lo.getIsbn(), new MovieService.Callback() {
+                    @Override
+                    public void onLoad(Movie movie) {
+                        if (movie != null) {
+                            Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(mItemImage);
+                        }
+                    }
+                    @Override
+                    public void onFailure() {
+                        mItemImage.setImageResource(R.drawable.ic_action_movie);
+                    }
+                });
+
                 break;
             case "MUSIC":
                 mItemImage.setImageResource(R.drawable.ic_action_music_1);
-                mItemISBN.setVisibility(View.GONE);
+                AlbumService.getInstance(getApplicationContext()).getAlbum(lo.getAuthor(), lo.getTitle(), new AlbumService.Callback() {
+                    @Override
+                    public void onLoad(Album album) {
+                        if (album != null) {
+                            List<Album.Image> list = album.getImages();
+                            Log.d(TAG, album.getArtist());
+                            for (Album.Image image : list) {
+                                if (image.getSize().equals("medium")) {
+                                    Picasso.with(getApplicationContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(mItemImage);
+                                }
+                            }
+
+                        }
+                    }
+
+
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+
                 break;
         }
-
+        mItemISBN.setText(lo.getIsbn());
         mItemTitle.setText(lo.getTitle());
         mItemAuthor.setText(lo.getAuthor());
         mItemCategory.setText(lo.getCategory());
@@ -97,6 +136,7 @@ public class RequestLoan extends AppCompatActivity {
                                 Log.d(TAG, String.valueOf(loan1.getIdLoan()));
                                 if (loan1.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
                                     failure.setVisibility(View.VISIBLE);
+                                    //prestito già richiesto dall'utente corrente
                                     break;
                                 } else {
                                     Query ref3 = database.getReference("loans/" + loan1.getIdLoan()).child("start");
@@ -105,7 +145,7 @@ public class RequestLoan extends AppCompatActivity {
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             Log.d(TAG, dataSnapshot.toString());
                                             if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
-                                                //oggetto in prestito
+                                                //oggetto in prestito da un altro utente
                                                 Log.d(TAG, dataSnapshot.getValue().toString());
                                                 failure.setVisibility(View.VISIBLE);
                                             } else {
@@ -138,7 +178,7 @@ public class RequestLoan extends AppCompatActivity {
 
     private void insertLoan() {
         String id = String.valueOf((new GregorianCalendar()).getTimeInMillis());
-        loan = new Loan(lo.getId(), FirebaseAuth.getInstance().getCurrentUser().getEmail(), id, lo.getType(), lo.getTitle());
+        loan = new Loan(lo.getId(), FirebaseAuth.getInstance().getCurrentUser().getEmail(), id, lo.getType(), lo.getTitle(), lo.getIsbn(), lo.getAuthor());
         ref = database.getReference("loans");
         ref.child(id).setValue(loan);
         success.setVisibility(View.VISIBLE);

@@ -1,6 +1,7 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.activity.admin;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,14 +20,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.FirebaseLoginActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LoanHolder;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
     private static final String TAG ="AdminMainActivity";
@@ -36,7 +43,7 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference("loans");
     private static ArrayList<Loan> items = new ArrayList<Loan>();
-
+    private final static int NOT_LOANABLE = 0;
 
 
     @Override
@@ -45,8 +52,6 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
         setContentView(R.layout.activity_admin_main);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(myToolbar);
-        getSupportActionBar().setLogo(R.drawable.logo);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
         myToolbar.setOnMenuItemClickListener(this);
 
         recyclerView = (RecyclerView) findViewById(R.id.adminRecyclerView);
@@ -57,19 +62,50 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
 
         adapter = new FirebaseRecyclerAdapter<Loan, LoanHolder>(Loan.class, R.layout.recyclerview_item_row, LoanHolder.class, ref) {
             @Override
-            protected void populateViewHolder(LoanHolder viewHolder, final Loan model, final int position) {
+            protected void populateViewHolder(final LoanHolder viewHolder, final Loan model, final int position) {
                 switch (model.getTipo().toString()) {
                     case "BOOK":
                         //immagine libro
-                        viewHolder.mItemImage.setImageResource(R.drawable.ic_action_book);
+
+                        Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+model.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(viewHolder.mItemImage);
 
                         break;
                     case "FILM":
-                        viewHolder.mItemImage.setImageResource(R.drawable.ic_action_movie);
+                        MovieService.getInstance(getApplicationContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
+                            @Override
+                            public void onLoad(Movie movie) {
+                                if (movie!=null) {
+                                    Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.mItemImage);
+                                }
+                            }
+
+                            @Override
+                            public void onFailure() {
+                                viewHolder.mItemImage.setImageResource(R.drawable.ic_action_movie);
+                            }
+                        });
 
                         break;
                     case "MUSIC":
                         viewHolder.mItemImage.setImageResource(R.drawable.ic_action_music_1);
+                        AlbumService.getInstance(getApplicationContext()).getAlbum(model.getAuthor(), model.getTitle(), new AlbumService.Callback() {
+                            @Override
+                            public void onLoad(Album album) {
+                                if (album != null) {
+                                    List<Album.Image> list = album.getImages();
+                                    Log.d(TAG, album.getArtist());
+                                    for (Album.Image image : list) {
+                                        if (image.getSize().equals("medium")) {
+                                            Picasso.with(getApplicationContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(viewHolder.mItemImage);
+                                        }
+                                    }
+
+                                }
+                            }
+                            @Override
+                            public void onFailure() {
+                            }
+                        });
 
                         break;
                 }
@@ -79,6 +115,7 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        final View view = v;
                         final Query query = database.getReference("loans").orderByChild("libraryObjectId").equalTo(model.getLibraryObjectId());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
 
@@ -106,12 +143,11 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
                                                     counter++;
                                                     Log.d(TAG, counter + "");
                                                     Log.d(TAG, dataSnapshot.getValue().toString());
+                                                    showSnackbar(view,NOT_LOANABLE);
+                                                } else if (counter == 0) {
+                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
 
-                                                } else {
-                                                    if (counter == 0) {
-                                                        database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
-                                                        database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
-                                                    }
                                                 }
                                             }
 
@@ -136,6 +172,14 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
             }
         };
         recyclerView.setAdapter(adapter);
+    }
+
+    public void showSnackbar(View view, int code){
+        switch (code){
+            case NOT_LOANABLE:
+                Snackbar.make(view, getString(R.string.already_loaned_object), Snackbar.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override

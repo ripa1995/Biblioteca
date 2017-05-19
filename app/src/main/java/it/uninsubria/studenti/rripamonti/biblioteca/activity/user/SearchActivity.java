@@ -1,6 +1,7 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.activity.user;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +20,32 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
+import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LibraryObjectHolder;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SearchActivity";
@@ -77,19 +98,47 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
             Query ref = myRef.orderByChild("title").startAt(titolo).endAt(titolo+"\uf8ff");
             adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row, LibraryObjectHolder.class, ref) {
                 @Override
-                protected void populateViewHolder(LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
+                protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
                     switch (model.getType().toString()) {
                         case "BOOK":
                             //immagine libro
-                            viewHolder.mItemImage.setImageResource(R.drawable.ic_action_book);
-
+                            Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+model.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(viewHolder.mItemImage);
                             break;
                         case "FILM":
                             viewHolder.mItemImage.setImageResource(R.drawable.ic_action_movie);
 
+                            MovieService.getInstance(getApplicationContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
+                                @Override
+                                public void onLoad(Movie movie) {
+                                    Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.mItemImage);
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                }
+                            });
+
                             break;
                         case "MUSIC":
                             viewHolder.mItemImage.setImageResource(R.drawable.ic_action_music_1);
+                            AlbumService.getInstance(getApplicationContext()).getAlbum(model.getAuthor(), model.getTitle(), new AlbumService.Callback() {
+                                @Override
+                                public void onLoad(Album album) {
+                                    if (album!=null) {
+                                        List<Album.Image> list = album.getImages();
+                                        Log.d(TAG, album.getArtist());
+                                        for (Album.Image image : list) {
+                                            if (image.getSize().equals("medium")) {
+                                                Picasso.with(getApplicationContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(viewHolder.mItemImage);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure() {
+                                }
+                            });
 
                             break;
                     }

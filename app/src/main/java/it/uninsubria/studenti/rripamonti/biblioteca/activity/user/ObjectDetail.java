@@ -10,8 +10,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.List;
+
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
+import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 public class ObjectDetail extends AppCompatActivity {
     private LibraryObject lo;
@@ -50,25 +58,55 @@ public class ObjectDetail extends AppCompatActivity {
          mItemAuthor = (TextView) findViewById(R.id.tv_author);
          mItemCategory = (TextView) findViewById(R.id.tv_category);
          mItemISBN = (TextView) findViewById(R.id.tv_isbn);
+        mItemISBN.setVisibility(View.VISIBLE);
     }
     private void populateView(){
         switch (lo.getType().toString()) {
             case "BOOK":
                 //immagine libro
-                mItemImage.setImageResource(R.drawable.ic_action_book);
-                mItemISBN.setText(lo.getIsbn());
-                mItemISBN.setVisibility(View.VISIBLE);
+
+
+                Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+lo.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(mItemImage);
                 break;
             case "FILM":
-                mItemImage.setImageResource(R.drawable.ic_action_movie);
-                mItemISBN.setVisibility(View.GONE);
+                MovieService.getInstance(getApplicationContext()).getMovie(lo.getIsbn(), new MovieService.Callback() {
+                    @Override
+                    public void onLoad(Movie movie) {
+                        if (movie != null) {
+                            Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(mItemImage);
+                        }
+                    }
+                    @Override
+                    public void onFailure() {
+                        mItemImage.setImageResource(R.drawable.ic_action_movie);
+                    }
+                });
+
                 break;
             case "MUSIC":
                 mItemImage.setImageResource(R.drawable.ic_action_music_1);
-                mItemISBN.setVisibility(View.GONE);
+                AlbumService.getInstance(getApplicationContext()).getAlbum(lo.getAuthor(), lo.getTitle(), new AlbumService.Callback() {
+                    @Override
+                    public void onLoad(Album album) {
+                        if (album != null) {
+                            List<Album.Image> list = album.getImages();
+                            Log.d(TAG, album.getArtist());
+                            for (Album.Image image : list) {
+                                if (image.getSize().equals("medium")) {
+                                    Picasso.with(getApplicationContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(mItemImage);
+                                }
+                            }
+
+                        }
+                    }
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+
                 break;
         }
-
+        mItemISBN.setText(lo.getIsbn());
         mItemTitle.setText(lo.getTitle());
         mItemAuthor.setText(lo.getAuthor());
         mItemCategory.setText(lo.getCategory());

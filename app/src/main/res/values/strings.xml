@@ -68,7 +68,7 @@
     <string name="type">Type:</string>
     <string name="title">Title</string>
     <string name="author">Author</string>
-    <string name="isbn">ISBN</string>
+    <string name="isbn">ISBN-13</string>
     <string name="category">Category</string>
     <string name="name">Name</string>
     <string name="surname">Surname</string>
@@ -89,4 +89,12 @@
     <string name="insert_userid">Insert user id</string>
     <string name="end_loan">End loan</string>
     <string name="not_started">Not started</string>
+    <string name="already_loaned_object">There\'s already a loan for this object!</string>
+    <string name="insert_imdb">Insert IMDb</string>
+    <string name="insert_mbid">Insert MBId</string>
+    <string name="album_title">Album title</string>
+    <string name="hint_title">Title</string>
+    <string name="book_title">Book title</string>
+    <string name="album_hint">Album title</string>
+    <string name="film_hint">Film title</string>
 </resources>

@@ -21,7 +21,7 @@
     <string-array name="types">
         <item>Attività extra</item>
         <item>Libro</item>
-        <item>Musica</item>
+        <item>Album musicale</item>
         <item>Film</item>
     </string-array>
     <string name="title_activity_user_tabbed">UserTabbedActivity</string>
@@ -64,7 +64,7 @@
     <string name="type">Tipo:</string>
     <string name="title">Titolo</string>
     <string name="author">Autore</string>
-    <string name="isbn">ISBN</string>
+    <string name="isbn">ISBN-13</string>
     <string name="category">Categoria</string>
     <string name="name">Nome</string>
     <string name="surname">Cognome</string>
@@ -79,10 +79,18 @@
     <string name="log_out">Disconnetti</string>
     <string name="loan_status">Stato prestiti</string>
     <string name="confirm">Conferma</string>
-    <string name="not_start">Not started</string>
-    <string name="insert_loan_id">Insert loan id!</string>
-    <string name="insertloan_id">Insert loan id</string>
-    <string name="insert_userid">Insert user id</string>
-    <string name="end_loan">End loan</string>
-    <string name="not_started">Not started</string>
+    <string name="not_start">Non iniziato</string>
+    <string name="insert_loan_id">Inserire id prestito!</string>
+    <string name="insertloan_id">Inserire id prestito</string>
+    <string name="insert_userid">Inserire id utente</string>
+    <string name="end_loan">Termina prestiti</string>
+    <string name="not_started">Non iniziato</string>
+    <string name="already_loaned_object">Al momento vi è un prestito in corso per questo oggetto</string>
+    <string name="insert_imdb">Inserire IMDb</string>
+    <string name="insert_mbid">Inserire MBId</string>
+    <string name="album_title">Album title</string>
+    <string name="hint_title">Titolo</string>
+    <string name="book_title">Titolo libro</string>
+    <string name="album_hint">Titolo album</string>
+    <string name="film_hint">Titolo film</string>
 </resources>

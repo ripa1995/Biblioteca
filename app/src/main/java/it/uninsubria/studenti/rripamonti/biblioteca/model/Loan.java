@@ -15,6 +15,8 @@ public class Loan {
     private String idLoan;
     private Type tipo;
     private String title;
+    private String isbn;
+    private String author;
 
     public Loan() {
 
@@ -24,7 +26,7 @@ public class Loan {
 
 
 
-    public Loan(String mLo, String uid, String mId, Type mTipo, String mTitle) {
+    public Loan(String mLo, String uid, String mId, Type mTipo, String mTitle, String mISBN,String mAuthor) {
         this.idLoan = mId;
         this.title = mTitle;
         this.libraryObjectId = mLo;
@@ -32,7 +34,8 @@ public class Loan {
         start_date = 0;
         start = false;
         tipo = mTipo;
-
+        isbn = mISBN;
+        author = mAuthor;
 
     }
 
@@ -90,5 +93,21 @@ public class Loan {
 
     public void setTipo(Type tipo) {
         this.tipo = tipo;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author){
+        this.author = author;
     }
 }
