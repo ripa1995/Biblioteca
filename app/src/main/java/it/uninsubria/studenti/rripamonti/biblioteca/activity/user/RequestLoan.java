@@ -43,6 +43,7 @@ public class RequestLoan extends AppCompatActivity {
     private Query ref2;
     private LibraryObject lo;
     private Loan loan;
+    private Button btn_loan;
     private TextView mItemTitle, mItemAuthor, mItemCategory, mItemISBN, success, failure;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     @Override
@@ -53,7 +54,7 @@ public class RequestLoan extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Button btn_loan = (Button) findViewById(R.id.btn_loan);
+        btn_loan = (Button) findViewById(R.id.btn_loan);
         final ImageView mItemImage = (ImageView) findViewById(R.id.item_image);
          mItemTitle = (TextView) findViewById(R.id.tv_title);
          mItemAuthor = (TextView) findViewById(R.id.tv_author);
@@ -76,6 +77,7 @@ public class RequestLoan extends AppCompatActivity {
 
                 break;
             case "FILM":
+                mItemImage.setImageResource(R.drawable.ic_action_movie);
                 MovieService.getInstance(getApplicationContext()).getMovie(lo.getIsbn(), new MovieService.Callback() {
                     @Override
                     public void onLoad(Movie movie) {
@@ -85,13 +87,14 @@ public class RequestLoan extends AppCompatActivity {
                     }
                     @Override
                     public void onFailure() {
-                        mItemImage.setImageResource(R.drawable.ic_action_movie);
+
                     }
                 });
 
                 break;
             case "MUSIC":
                 mItemImage.setImageResource(R.drawable.ic_action_music_1);
+                mItemISBN.setVisibility(View.GONE);
                 AlbumService.getInstance(getApplicationContext()).getAlbum(lo.getAuthor(), lo.getTitle(), new AlbumService.Callback() {
                     @Override
                     public void onLoad(Album album) {
@@ -135,7 +138,9 @@ public class RequestLoan extends AppCompatActivity {
                                 Loan loan1 = childSnapshot.getValue(Loan.class);
                                 Log.d(TAG, String.valueOf(loan1.getIdLoan()));
                                 if (loan1.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){
+                                    failure.setText(getString(R.string.loan_already_requested));
                                     failure.setVisibility(View.VISIBLE);
+                                    btn_loan.setVisibility(View.GONE);
                                     //prestito già richiesto dall'utente corrente
                                     break;
                                 } else {
@@ -147,7 +152,9 @@ public class RequestLoan extends AppCompatActivity {
                                             if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
                                                 //oggetto in prestito da un altro utente
                                                 Log.d(TAG, dataSnapshot.getValue().toString());
+                                                failure.setText(getString(R.string.already_loaned_object));
                                                 failure.setVisibility(View.VISIBLE);
+                                                btn_loan.setVisibility(View.GONE);
                                             } else {
                                                 //oggetto non in prestito
                                                 Log.d(TAG, "null");
@@ -176,12 +183,18 @@ public class RequestLoan extends AppCompatActivity {
 
     }
 
+    /*
+    Crea un nuovo Loan e lo inserisce nel database,
+    il prestito può essere richiesto solo se non vi sono prestiti attivi per quell'oggetto,
+    il prestito non viene richiesto se è già stata fatta richiesta dall'utente o se vi è un prestito attivo per quell'oggetto.
+     */
     private void insertLoan() {
         String id = String.valueOf((new GregorianCalendar()).getTimeInMillis());
         loan = new Loan(lo.getId(), FirebaseAuth.getInstance().getCurrentUser().getEmail(), id, lo.getType(), lo.getTitle(), lo.getIsbn(), lo.getAuthor());
         ref = database.getReference("loans");
         ref.child(id).setValue(loan);
         success.setVisibility(View.VISIBLE);
+        btn_loan.setVisibility(View.GONE);
     }
 
     @Override

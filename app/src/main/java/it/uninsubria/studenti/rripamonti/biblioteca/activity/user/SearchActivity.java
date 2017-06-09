@@ -46,7 +46,9 @@ import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
-
+/*
+l'utente può effettuare delle ricerche nel catalogo, in base al titolo, la ricerca è case sensitive e supporta i prefissi.
+ */
 public class SearchActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SearchActivity";
     private LinearLayoutManager linearLayoutManager;
@@ -110,7 +112,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                             MovieService.getInstance(getApplicationContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
                                 @Override
                                 public void onLoad(Movie movie) {
-                                    Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.mItemImage);
+                                    if (movie != null) {
+                                        Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.mItemImage);
+                                    }
                                 }
 
                                 @Override

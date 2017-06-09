@@ -34,7 +34,10 @@ import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
-
+/*
+visualizza i prestiti in corso e le richieste di prestiti (segnati come non iniziati), visualizza anche la data di inizio/fine prestito
+nel momento in cui la data odierna>data fine prestito, la scritta appare di color rosso
+ */
 public class LoanStatusActivity extends AppCompatActivity {
     private static final String TAG = "LoanStatusActivity";
     private LinearLayoutManager linearLayoutManager;
@@ -57,6 +60,8 @@ public class LoanStatusActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
         Query myRef = ref.orderByChild("userId").equalTo(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         myRef.keepSynced(true);
+
+
 
         adapter = new FirebaseRecyclerAdapter<Loan, LoanStatusHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanStatusHolder.class, myRef) {
             @Override

@@ -24,7 +24,9 @@ import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.ExtraActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
-
+/*
+permette all'admin di aggiungere oggetti al catalogo
+ */
 public class AddObjectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
     private static final String TAG ="AddObjectActivity";
     private EditText tv_title, tv_author, tv_category, tv_name, tv_surname, tv_date, tv_isbn;

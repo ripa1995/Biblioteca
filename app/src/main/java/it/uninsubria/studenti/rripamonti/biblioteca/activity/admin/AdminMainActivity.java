@@ -1,7 +1,10 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.activity.admin;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +37,9 @@ import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
-
+/*
+schermata principale admin, mostra le richieste di prestito, da qui un admin può far partire un prestito
+ */
 public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMenuItemClickListener {
     private static final String TAG ="AdminMainActivity";
     private LinearLayoutManager linearLayoutManager;
@@ -44,6 +49,7 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
     private DatabaseReference myRef = database.getReference("loans");
     private static ArrayList<Loan> items = new ArrayList<Loan>();
     private final static int NOT_LOANABLE = 0;
+    private AlertDialog.Builder alertDialogBuilder;
 
 
     @Override
@@ -116,55 +122,71 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
                     @Override
                     public void onClick(View v) {
                         final View view = v;
-                        final Query query = database.getReference("loans").orderByChild("libraryObjectId").equalTo(model.getLibraryObjectId());
-                        query.addListenerForSingleValueEvent(new ValueEventListener() {
-
+                        alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                        alertDialogBuilder.setMessage(getString(R.string.dialog_start_loan));
+                        alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                if (dataSnapshot.getChildrenCount()==1){
-                                    Log.d(TAG,dataSnapshot.toString());
-                                    database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
-                                    database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
-                                }
-                                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                                    Loan loan1 = childSnapshot.getValue(Loan.class);
-                                    if (!loan1.getIdLoan().equals(model.getIdLoan())) {
-                                        Query query1 = database.getReference("loans/" + loan1.getIdLoan()).child("start");
-                                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            int counter = 0;
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                final Query query = database.getReference("loans").orderByChild("libraryObjectId").equalTo(model.getLibraryObjectId());
+                                query.addListenerForSingleValueEvent(new ValueEventListener() {
 
-                                            @Override
-                                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                                if (dataSnapshot.getValue()==null){
-                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
-                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
-                                                } else if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
-                                                    //oggetto in prestito
-                                                    counter++;
-                                                    Log.d(TAG, counter + "");
-                                                    Log.d(TAG, dataSnapshot.getValue().toString());
-                                                    showSnackbar(view,NOT_LOANABLE);
-                                                } else if (counter == 0) {
-                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
-                                                    database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        if (dataSnapshot.getChildrenCount()==1){
+                                            Log.d(TAG,dataSnapshot.toString());
+                                            database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                            database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                                        }
+                                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                            Loan loan1 = childSnapshot.getValue(Loan.class);
+                                            if (!loan1.getIdLoan().equals(model.getIdLoan())) {
+                                                Query query1 = database.getReference("loans/" + loan1.getIdLoan()).child("start");
+                                                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    int counter = 0;
 
-                                                }
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                                        if (dataSnapshot.getValue()==null){
+                                                            database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                                            database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+                                                        } else if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
+                                                            //oggetto in prestito
+                                                            counter++;
+                                                            Log.d(TAG, counter + "");
+                                                            Log.d(TAG, dataSnapshot.getValue().toString());
+                                                            showSnackbar(view,NOT_LOANABLE);
+                                                        } else if (counter == 0) {
+                                                            database.getReference().child("loans").child(model.getIdLoan()).child("start").setValue(true);
+                                                            database.getReference().child("loans").child(model.getIdLoan()).child("start_date").setValue(new GregorianCalendar().getTimeInMillis());
+
+                                                        }
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
                                             }
-
-                                            @Override
-                                            public void onCancelled(DatabaseError databaseError) {
-
-                                            }
-                                        });
+                                        }
                                     }
-                                }
-                            }
 
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
+                            }
+                        });
+                        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
                             @Override
-                            public void onCancelled(DatabaseError databaseError) {
+                            public void onClick(DialogInterface dialog, int which) {
 
                             }
                         });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+
 
                     }
                 });

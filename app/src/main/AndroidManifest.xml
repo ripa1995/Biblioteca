@@ -4,9 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
+
 
     <application
         android:allowBackup="true"
@@ -34,19 +32,19 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.SearchActivity"
-            android:label="Search"
+            android:label="@string/search"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.LoanStatusActivity"
-            android:label="Loan Status"
+            android:label="@string/loan_status"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.user.RequestLoan"
-            android:label="Request Loan"
+            android:label="@string/request_loan"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.admin.AdminMainActivity"
-            android:label="New Loan Request"
+            android:label="@string/new_loan_req"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,29 +62,8 @@
             android:label="@string/detail"
             android:screenOrientation="portrait" />
 
-        <!--
-     Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more.
-        -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_action_book" />
-        <!--
-             Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/colorAccent" />
 
         <activity android:name=".activity.admin.EndOfLoan" />
-        <activity android:name=".photoactivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

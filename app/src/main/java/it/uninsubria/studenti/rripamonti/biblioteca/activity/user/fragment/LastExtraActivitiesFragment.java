@@ -32,7 +32,9 @@ import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.ExtraActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.ActivitiesHolder;
 
-
+/*
+mostra le prossime attività extra
+ */
 public class LastExtraActivitiesFragment extends Fragment {
 
 

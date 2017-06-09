@@ -30,7 +30,9 @@ import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
-
+/*
+mostra gli ultimi oggetti aggiunti al catalogo
+ */
 
 public class LastObjectFragment extends Fragment {
     private static final String TAG = "LastObjectFragment";

@@ -60,6 +60,8 @@ public class ObjectDetail extends AppCompatActivity {
          mItemISBN = (TextView) findViewById(R.id.tv_isbn);
         mItemISBN.setVisibility(View.VISIBLE);
     }
+
+    //popola la view in base all'oggetto passato tramite intent
     private void populateView(){
         switch (lo.getType().toString()) {
             case "BOOK":
@@ -85,6 +87,7 @@ public class ObjectDetail extends AppCompatActivity {
                 break;
             case "MUSIC":
                 mItemImage.setImageResource(R.drawable.ic_action_music_1);
+                mItemISBN.setVisibility(View.GONE);
                 AlbumService.getInstance(getApplicationContext()).getAlbum(lo.getAuthor(), lo.getTitle(), new AlbumService.Callback() {
                     @Override
                     public void onLoad(Album album) {

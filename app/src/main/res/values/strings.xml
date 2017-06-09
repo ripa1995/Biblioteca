@@ -86,10 +86,10 @@
     <string name="not_start">Not started</string>
     <string name="insert_loan_id">Insert loan id!</string>
     <string name="insertloan_id">Insert loan id</string>
-    <string name="insert_userid">Insert user id</string>
+    <string name="insert_userid">Insert user email</string>
     <string name="end_loan">End loan</string>
     <string name="not_started">Not started</string>
-    <string name="already_loaned_object">There\'s already a loan for this object!</string>
+    <string name="already_loaned_object">There\'s already an active loan for this object!</string>
     <string name="insert_imdb">Insert IMDb</string>
     <string name="insert_mbid">Insert MBId</string>
     <string name="album_title">Album title</string>
@@ -97,4 +97,11 @@
     <string name="book_title">Book title</string>
     <string name="album_hint">Album title</string>
     <string name="film_hint">Film title</string>
+    <string name="dialog_delete">You want to end/delete this loan?</string>
+    <string name="yes">Yes</string>
+    <string name="dialog_start_loan">You want to start this loan?</string>
+    <string name="loan_already_requested">Loan already requested!</string>
+    <string name="request_loan">Request Loan</string>
+    <string name="new_loan_req">New Loan Request</string>
+
 </resources>

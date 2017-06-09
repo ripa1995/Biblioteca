@@ -1,5 +1,8 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.activity.admin;
 
+import android.content.DialogInterface;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,7 +31,9 @@ import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
-
+/*
+tramite una ricerca basata sulla mail utente, mostra i prestiti di quest'ultimo, e consente di terminare (cancellare definitivamente) il prestito scelto.
+ */
 public class EndOfLoan extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SearchActivity";
     private LinearLayoutManager linearLayoutManager;
@@ -39,6 +44,7 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
     private static ArrayList<Loan> items = new ArrayList<Loan>();
     private Button btn_search;
     private EditText et_search;
+    private AlertDialog.Builder alertDialogBuilder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +142,23 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
                         @Override
                         public void onClick(View v) {
                             //creare un dialog per la conferma della cancellazione
-                            database.getReference().child("loans").child(model.getIdLoan()).removeValue();
+                            alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                            alertDialogBuilder.setMessage(getString(R.string.dialog_delete));
+                            alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface arg0, int arg1) {
+                                    database.getReference().child("loans").child(model.getIdLoan()).removeValue();
+                                }
+                            });
+                            alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+                            alertDialog.show();
+
                         }
                     });
 
