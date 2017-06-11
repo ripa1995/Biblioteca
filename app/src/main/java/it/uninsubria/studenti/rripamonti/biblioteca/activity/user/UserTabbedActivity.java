@@ -89,7 +89,6 @@ public class UserTabbedActivity extends AppCompatActivity implements Toolbar.OnM
                 Log.d(TAG,"action SEARCH has clicked");
                 intent = new Intent(getApplicationContext(), SearchActivity.class);
                 startActivity(intent);
-
                 return true;
         }
         return false;
