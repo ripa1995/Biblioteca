@@ -43,7 +43,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:hint="@string/album_title"
             android:ems="10"
             android:id="@+id/et_title" />
@@ -51,7 +51,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:hint="@string/author"
             android:ems="10"
             android:id="@+id/et_author" />
@@ -59,7 +59,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="number"
             android:hint="@string/isbn"
             android:ems="10"
             android:id="@+id/et_isbn" />
@@ -67,7 +67,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:hint="@string/category"
             android:ems="10"
             android:id="@+id/et_category" />
@@ -75,7 +75,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:ems="10"
             android:hint="@string/name"
             android:id="@+id/et_name" />
@@ -83,7 +83,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="textPersonName|textCapSentences"
             android:ems="10"
             android:hint="@string/surname"
             android:id="@+id/et_surname" />

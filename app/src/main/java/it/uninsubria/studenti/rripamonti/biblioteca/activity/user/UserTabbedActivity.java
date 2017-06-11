@@ -79,12 +79,7 @@ public class UserTabbedActivity extends AppCompatActivity implements Toolbar.OnM
                 startActivity(intent);
                 finish();
                 return true;
-            case R.id.action_settings:
-                Log.d(TAG,"action SETTING has clicked");
-                return true;
-            case R.id.action_help:
-                Log.d(TAG,"action HELP has clicked");
-                return true;
+
             case R.id.action_loan_status:
                 Log.d(TAG,"action LOANSTATUS has clicked");
                 intent = new Intent(getApplicationContext(), LoanStatusActivity.class);

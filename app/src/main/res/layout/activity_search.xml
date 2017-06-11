@@ -28,7 +28,7 @@
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
+                android:inputType="textPersonName|textCapSentences"
                 android:hint="@string/insert_title_here"
                 android:ems="10"
                 android:id="@+id/et_search"

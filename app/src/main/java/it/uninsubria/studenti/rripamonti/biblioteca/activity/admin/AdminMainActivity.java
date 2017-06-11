@@ -226,19 +226,13 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
                 startActivity(intent);
                 finish();
                 return true;
-            case R.id.action_settings:
-                Log.d(TAG,"action SETTING has clicked");
 
-
-                return true;
             case R.id.action_endLoan:
                 intent = new Intent(getApplicationContext(), EndOfLoan.class);
                 startActivity(intent);
                 return true;
 
-            case R.id.action_help:
-                Log.d(TAG,"action HELP has clicked");
-                return true;
+
             case R.id.action_add:
                 Log.d(TAG,"action ADD has clicked");
                 intent = new Intent(getApplicationContext(), AddObjectActivity.class);
