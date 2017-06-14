@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_add_object"
     android:layout_width="match_parent"
@@ -88,13 +89,28 @@
             android:hint="@string/surname"
             android:id="@+id/et_surname" />
 
-        <EditText
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:hint="@string/date"
-            android:id="@+id/et_date" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:ems="10"
+                android:hint="@string/date"
+                android:id="@+id/et_date"
+                android:layout_weight="1"
+                 />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_action_calendar"
+                android:id="@+id/calendar_button"
+                android:background="@android:color/transparent" />
+        </LinearLayout>
 
         <Button
             android:text="@string/confirm"

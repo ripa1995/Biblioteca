@@ -99,5 +99,6 @@
     <string name="loan_already_requested">Prestito già richiesto!</string>
     <string name="request_loan">Richiesta Prestito</string>
     <string name="new_loan_req">Nuove Richieste Prestito</string>
+    <string name="date_in_past">Data non valida, l\'attività non può avvenire nel passato!</string>
 
 </resources>

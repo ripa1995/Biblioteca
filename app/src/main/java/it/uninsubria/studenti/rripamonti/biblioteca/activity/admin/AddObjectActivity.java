@@ -1,5 +1,6 @@
 package it.uninsubria.studenti.rripamonti.biblioteca.activity.admin;
 
+import android.app.DatePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -8,8 +9,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -32,8 +36,11 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
     private EditText tv_title, tv_author, tv_category, tv_name, tv_surname, tv_date, tv_isbn;
     private int selected = -1;
     private Button btn_confirm;
+    private ImageButton btn_calendar;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef;
+    private GregorianCalendar creationDate = null;
+    private GregorianCalendar dueDate = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +67,43 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_isbn = (EditText) findViewById(R.id.et_isbn);
         btn_confirm = (Button) findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(this);
+        btn_calendar=(ImageButton) findViewById(R.id.calendar_button);
+
+
+        creationDate = (GregorianCalendar) GregorianCalendar.getInstance();
+        dueDate = new GregorianCalendar();
+        dueDate.setTimeInMillis(creationDate.getTimeInMillis());
+
+        final DatePickerDialog datePicker = new DatePickerDialog(
+                this,
+                new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        dueDate.set(GregorianCalendar.YEAR, year);
+                        dueDate.set(GregorianCalendar.MONTH, monthOfYear);
+                        dueDate.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth);
+                        updateEtDate(); // update the text in the et_date
+
+                    }
+                },
+                dueDate.get(GregorianCalendar.YEAR),
+                dueDate.get(GregorianCalendar.MONTH),
+                dueDate.get(GregorianCalendar.DAY_OF_MONTH)
+        );
+
+        btn_calendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker.show();
+            }
+        });
 
 
     }
+
+    private void updateEtDate() {
+        ((EditText) findViewById(R.id.et_date)).setText(String.format(String.format("%1$td/%1$tm/%1$tY", dueDate)));
+    }
+
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
@@ -76,6 +117,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_name.setVisibility(View.VISIBLE);
                 tv_surname.setVisibility(View.VISIBLE);
                 tv_date.setVisibility(View.VISIBLE);
+                btn_calendar.setVisibility(View.VISIBLE);
                 selected = 0;
                 break;
             case (1):
@@ -88,6 +130,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
+                btn_calendar.setVisibility(View.GONE);
                 selected = 1;
                 break;
             case (2):
@@ -99,6 +142,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
+                btn_calendar.setVisibility(View.GONE);
                 selected = 2;
                 break;
             case (3):
@@ -111,6 +155,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
+                btn_calendar.setVisibility(View.GONE);
                 selected = 3;
                 break;
         }
@@ -126,6 +171,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_name.setVisibility(View.GONE);
         tv_surname.setVisibility(View.GONE);
         tv_date.setVisibility(View.GONE);
+        btn_calendar.setVisibility(View.GONE);
         selected = -1;
     }
     @Override
@@ -143,6 +189,9 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
             return false;
         } else if (tv_surname.length()==0) {
             tv_surname.setError(getString(R.string.insert_surname));
+            return false;
+        } else if (tv_date.length()==0) {
+            tv_date.setError(getString(R.string.dateformat_error));
             return false;
         } else {
             return true;
@@ -199,6 +248,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
     }
     @Override
     public void onClick(View v) {
+
         switch (selected){
             case (0):
                 //creare extraActivity
@@ -212,12 +262,17 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                     } catch (ParseException e) {
                         tv_date.setError(getString(R.string.dateformat_error));
                     }
-                    ExtraActivity ea = new ExtraActivity(tv_title.getText().toString(), tv_name.getText().toString(), tv_surname.getText().toString(), date.getTimeInMillis());
-                    myRef = database.getReference("activities");
-                    myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(ea);
-                    clearTextView();
-                    clearErrorTv();
-                    Toast.makeText(this, getString(R.string.new_activity), Toast.LENGTH_LONG).show();
+                    GregorianCalendar today = new GregorianCalendar();
+                    if (today.getTimeInMillis()>=date.getTimeInMillis()){
+                        tv_date.setError(getString(R.string.date_in_past));
+                    } else {
+                        ExtraActivity ea = new ExtraActivity(tv_title.getText().toString(), tv_name.getText().toString(), tv_surname.getText().toString(), date.getTimeInMillis());
+                        myRef = database.getReference("activities");
+                        myRef.child(String.valueOf(new GregorianCalendar().getTimeInMillis())).setValue(ea);
+                        clearTextView();
+                        clearErrorTv();
+                        Toast.makeText(this, getString(R.string.new_activity), Toast.LENGTH_LONG).show();
+                    }
                 }
                 break;
             case(1):
@@ -287,5 +342,15 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_name.setError(null);
         tv_surname.setError(null);
         tv_date.setError(null);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        creationDate = (GregorianCalendar) GregorianCalendar.getInstance();
+        dueDate = new GregorianCalendar();
+        dueDate.setTimeInMillis(creationDate.getTimeInMillis());
+
     }
 }
