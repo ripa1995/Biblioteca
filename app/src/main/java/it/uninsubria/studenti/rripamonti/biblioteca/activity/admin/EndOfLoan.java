@@ -93,7 +93,7 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
 
                             break;
                         case "FILM":
-
+                            viewHolder.itemImage.setImageResource(R.drawable.ic_action_movie);
                             MovieService.getInstance(getApplicationContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
                                 @Override
                                 public void onLoad(Movie movie) {
@@ -103,7 +103,7 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
                                 }
                                 @Override
                                 public void onFailure() {
-                                    viewHolder.itemImage.setImageResource(R.drawable.ic_action_movie);
+
                                 }
                             });
                             break;

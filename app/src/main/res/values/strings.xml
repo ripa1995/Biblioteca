@@ -104,5 +104,6 @@
     <string name="request_loan">Request Loan</string>
     <string name="new_loan_req">New Loan Request</string>
     <string name="date_in_past">Invalid date, the activity can not take place in the past!</string>
+    <string name="loan_already_requested_another_user">Loan already requested by another user</string>
 
 </resources>

@@ -144,21 +144,21 @@ public class RequestLoan extends AppCompatActivity {
                                     //prestito già richiesto dall'utente corrente
                                     break;
                                 } else {
-                                    Query ref3 = database.getReference("loans/" + loan1.getIdLoan()).child("start");
+                                    Query ref3 = database.getReference("loans/" + loan1.getIdLoan()).child("start").equalTo("true");
                                     ref3.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             Log.d(TAG, dataSnapshot.toString());
-                                            if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
+                                            if (dataSnapshot.getValue()==null){
+                                                failure.setText(getString(R.string.loan_already_requested_another_user));
+                                                failure.setVisibility(View.VISIBLE);
+                                                btn_loan.setVisibility(View.GONE);
+                                            }else {
                                                 //oggetto in prestito da un altro utente
                                                 Log.d(TAG, dataSnapshot.getValue().toString());
                                                 failure.setText(getString(R.string.already_loaned_object));
                                                 failure.setVisibility(View.VISIBLE);
                                                 btn_loan.setVisibility(View.GONE);
-                                            } else {
-                                                //oggetto non in prestito
-                                                Log.d(TAG, "null");
-                                                insertLoan();
                                             }
                                         }
 
@@ -186,7 +186,7 @@ public class RequestLoan extends AppCompatActivity {
     /*
     Crea un nuovo Loan e lo inserisce nel database,
     il prestito può essere richiesto solo se non vi sono prestiti attivi per quell'oggetto,
-    il prestito non viene richiesto se è già stata fatta richiesta dall'utente o se vi è un prestito attivo per quell'oggetto.
+    il prestito non viene richiesto se è già stata fatta richiesta da qualche utente.
      */
     private void insertLoan() {
         String id = String.valueOf((new GregorianCalendar()).getTimeInMillis());
