@@ -9,7 +9,9 @@ You can browse the newsstands (books, music, movies, extra activities).
 
 You can check the status of your loan operations in the library and also request new loans.
 
-An admin user can use the app to catalog new books and accept or cancel the loans.
+An admin user can use the app to catalog new books and edit them, accept or cancel the loans and save in .csv file the books.
+
+Project has been edited to match the needs of the Secondary School of Malnate (VA)
 
 # Biblioteca
 
@@ -22,4 +24,6 @@ Puoi consultare le vetrine delle novità (libri, musica, film, attività extra).
 
 Puoi consultare lo stato delle tue operazioni di prestito in biblioteca e richiedere nuovi prestiti.
 
-Un utente admin può utilizzare l’App per catalogare nuovi libri e accettare o cancellare i prestiti.
+Un utente admin può utilizzare l’App per catalogare nuovi libri e modificarli, accettare o cancellare i prestiti e salvare i libri in file .csv.
+
+Il progetto è stato infine modificato per soddisfare le esigenze della Scuola Media di Malnate (VA).
