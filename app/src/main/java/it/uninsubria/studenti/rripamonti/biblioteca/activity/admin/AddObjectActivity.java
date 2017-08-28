@@ -28,12 +28,15 @@ import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.ExtraActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
+
+import static it.uninsubria.studenti.rripamonti.biblioteca.R.id.tv_isbn;
+
 /*
 permette all'admin di aggiungere oggetti al catalogo
  */
 public class AddObjectActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener{
     private static final String TAG ="AddObjectActivity";
-    private EditText tv_title, tv_author, tv_category, tv_name, tv_surname, tv_date, tv_isbn;
+    private EditText tv_title, tv_author, tv_category, tv_name, tv_surname, tv_date, tv_cdd, tv_ingresso, tv_editore;
     private int selected = -1;
     private Button btn_confirm;
     private ImageButton btn_calendar;
@@ -64,7 +67,10 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_name = (EditText) findViewById(R.id.et_name);
         tv_surname = (EditText) findViewById(R.id.et_surname);
         tv_date = (EditText) findViewById(R.id.et_date);
-        tv_isbn = (EditText) findViewById(R.id.et_isbn);
+        tv_cdd = (EditText) findViewById(R.id.et_isbn);
+        tv_ingresso = (EditText) findViewById(R.id.et_ingresso);
+        tv_editore = (EditText) findViewById(R.id.et_editore);
+
         btn_confirm = (Button) findViewById(R.id.btn_confirm);
         btn_confirm.setOnClickListener(this);
         btn_calendar=(ImageButton) findViewById(R.id.calendar_button);
@@ -113,49 +119,57 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.GONE);
                 tv_category.setVisibility(View.GONE);
-                tv_isbn.setVisibility(View.GONE);
+                tv_cdd.setVisibility(View.GONE);
                 tv_name.setVisibility(View.VISIBLE);
                 tv_surname.setVisibility(View.VISIBLE);
                 tv_date.setVisibility(View.VISIBLE);
                 btn_calendar.setVisibility(View.VISIBLE);
+                tv_editore.setVisibility(View.GONE);
+                tv_ingresso.setVisibility(View.GONE);
                 selected = 0;
                 break;
             case (1):
                 tv_title.setHint(getString(R.string.book_title));
-                tv_isbn.setHint("ISBN-13");
+                tv_cdd.setHint("CDD");
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
-                tv_category.setVisibility(View.VISIBLE);
-                tv_isbn.setVisibility(View.VISIBLE);
+                tv_category.setVisibility(View.GONE);
+                tv_cdd.setVisibility(View.VISIBLE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
                 btn_calendar.setVisibility(View.GONE);
+                tv_editore.setVisibility(View.VISIBLE);
+                tv_ingresso.setVisibility(View.VISIBLE);
                 selected = 1;
                 break;
             case (2):
                 tv_title.setHint(getString(R.string.album_hint));
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
-                tv_isbn.setVisibility(View.GONE);
+                tv_cdd.setVisibility(View.GONE);
                 tv_category.setVisibility(View.VISIBLE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
                 btn_calendar.setVisibility(View.GONE);
+                tv_editore.setVisibility(View.GONE);
+                tv_ingresso.setVisibility(View.GONE);
                 selected = 2;
                 break;
             case (3):
                 tv_title.setHint(getString(R.string.film_hint));
-                tv_isbn.setHint("IMDb");
+                tv_cdd.setHint("IMDb");
                 tv_title.setVisibility(View.VISIBLE);
                 tv_author.setVisibility(View.VISIBLE);
                 tv_category.setVisibility(View.VISIBLE);
-                tv_isbn.setVisibility(View.VISIBLE);
+                tv_cdd.setVisibility(View.VISIBLE);
                 tv_name.setVisibility(View.GONE);
                 tv_surname.setVisibility(View.GONE);
                 tv_date.setVisibility(View.GONE);
                 btn_calendar.setVisibility(View.GONE);
+                tv_editore.setVisibility(View.GONE);
+                tv_ingresso.setVisibility(View.GONE);
                 selected = 3;
                 break;
         }
@@ -167,11 +181,13 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_title.setVisibility(View.GONE);
         tv_author.setVisibility(View.GONE);
         tv_category.setVisibility(View.GONE);
-        tv_isbn.setVisibility(View.GONE);
+        tv_cdd.setVisibility(View.GONE);
         tv_name.setVisibility(View.GONE);
         tv_surname.setVisibility(View.GONE);
         tv_date.setVisibility(View.GONE);
         btn_calendar.setVisibility(View.GONE);
+        tv_editore.setVisibility(View.GONE);
+        tv_ingresso.setVisibility(View.GONE);
         selected = -1;
     }
     @Override
@@ -204,11 +220,14 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         } else if (tv_author.length()==0){
             tv_author.setError(getString(R.string.insert_author));
             return false;
-        } else if (tv_category.length()==0) {
-            tv_category.setError(getString(R.string.insert_category));
+        } else if(tv_cdd.length()==0) {
+            tv_cdd.setError(getString(R.string.insert_cdd));
             return false;
-        }else if(tv_isbn.length()==0) {
-            tv_isbn.setError(getString(R.string.insert_isbn));
+        } else if(tv_editore.length()==0) {
+            tv_editore.setError(getString(R.string.insert_edition));
+            return false;
+        } else if(tv_ingresso.length()==0) {
+            tv_ingresso.setError(getString(R.string.insert_entry_n));
             return false;
         } else {
             return true;
@@ -225,8 +244,8 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         } else if (tv_category.length()==0) {
             tv_category.setError(getString(R.string.insert_category));
             return false;
-        }else if(tv_isbn.length()==0) {
-            tv_isbn.setError(getString(R.string.insert_imdb));
+        }else if(tv_cdd.length()==0) {
+            tv_cdd.setError(getString(R.string.insert_imdb));
             return false;
         }else {
             return true;
@@ -280,7 +299,9 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
 
                 if (areBookEditTextNotEmpty()){
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.BOOK,tv_isbn.getText().toString(), id);
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_editore.getText().toString(), Type.BOOK,tv_cdd.getText().toString(), id);
+                    libraryObject.setnIngresso(tv_ingresso.getText().toString());
+
                     myRef = database.getReference("objects");
                     myRef.child(id).setValue(libraryObject);
                     clearTextView();
@@ -311,7 +332,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 if(areFilmEditTextNotEmpty()) {
 
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM,tv_isbn.getText().toString(), id);
+                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM,tv_cdd.getText().toString(), id);
                     myRef = database.getReference("objects");
                     myRef.child(id).setValue(libraryObject);
                     clearTextView();
@@ -328,20 +349,24 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         tv_title.setText("");
         tv_author.setText("");
         tv_category.setText("");
-        tv_isbn.setText("");
+        tv_cdd.setText("");
         tv_name.setText("");
         tv_surname.setText("");
         tv_date.setText("");
+        tv_editore.setText("");
+        tv_ingresso.setText("");
     }
 
     private void clearErrorTv(){
         tv_title.setError(null);
         tv_author.setError(null);
         tv_category.setError(null);
-        tv_isbn.setError(null);
+        tv_cdd.setError(null);
         tv_name.setError(null);
         tv_surname.setError(null);
         tv_date.setError(null);
+        tv_editore.setError(null);
+        tv_ingresso.setError(null);
     }
 
     @Override

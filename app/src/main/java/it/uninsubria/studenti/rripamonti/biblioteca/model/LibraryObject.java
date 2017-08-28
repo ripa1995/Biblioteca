@@ -14,6 +14,8 @@ public class LibraryObject implements Serializable{
     private String category;
     private Type type;
     private String id;
+    private String year;
+    private String nIngresso;
 
 
     private boolean available = false;
@@ -24,15 +26,19 @@ public class LibraryObject implements Serializable{
         author = null;
         category = null;
         type = null;
+        year = null;
+        nIngresso = null;
     }
 
     public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mid){
         id = mid;
         isbn ="0";
+        year = "";
         title = mTitle;
         author = mAuthor;
         category = mCategory;
         type = mType;
+        nIngresso = "";
     }
     public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mIsbn, String mid){
         id = mid;
@@ -41,6 +47,17 @@ public class LibraryObject implements Serializable{
         author = mAuthor;
         category = mCategory;
         type = mType;
+        year = "";
+        nIngresso = "";
+    }
+    public LibraryObject(String mTitle, String mAuthor, String mCategory, Type mType, String mIsbn, String mid, String mYear){
+        id = mid;
+        isbn =mIsbn;
+        title = mTitle;
+        author = mAuthor;
+        category = mCategory;
+        type = mType;
+        year = mYear;
     }
 
     public String getId() {
@@ -83,6 +100,21 @@ public class LibraryObject implements Serializable{
         this.type = type;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getnIngresso() {
+        return nIngresso;
+    }
+
+    public void setnIngresso(String nIngresso) {
+        this.nIngresso = nIngresso;
+    }
 
     @Override
     public String toString() {
@@ -103,4 +135,6 @@ public class LibraryObject implements Serializable{
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
+
+
 }

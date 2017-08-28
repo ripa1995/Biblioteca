@@ -71,12 +71,13 @@ public class RequestLoan extends AppCompatActivity {
         switch (lo.getType().toString()) {
             case "BOOK":
                 //immagine libro
-
+                mItemISBN.setText(lo.getIsbn());
 
                 Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+lo.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(mItemImage);
 
                 break;
             case "FILM":
+                mItemISBN.setText(lo.getIsbn());
                 mItemImage.setImageResource(R.drawable.ic_action_movie);
                 MovieService.getInstance(getApplicationContext()).getMovie(lo.getIsbn(), new MovieService.Callback() {
                     @Override
@@ -118,7 +119,7 @@ public class RequestLoan extends AppCompatActivity {
 
                 break;
         }
-        mItemISBN.setText(lo.getIsbn());
+
         mItemTitle.setText(lo.getTitle());
         mItemAuthor.setText(lo.getAuthor());
         mItemCategory.setText(lo.getCategory());
@@ -126,7 +127,7 @@ public class RequestLoan extends AppCompatActivity {
         btn_loan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ref2 = database.getReference("loans").orderByChild("libraryObjectId").equalTo(lo.getId());
+                ref2 = database.getReference("loans").orderByChild("loId").equalTo(lo.getId());
                 ref2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

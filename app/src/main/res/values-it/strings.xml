@@ -27,6 +27,25 @@
     <string name="title_activity_user_tabbed">UserTabbedActivity</string>
     <string name="action_settings">Impostazioni</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string-array name="genre">
+        <item>Genere</item>
+        <item>Per ragazzi</item>
+        <item>Primi libri</item>
+        <item>Fiabe</item>
+        <item>Miti</item>
+        <item>Gialli</item>
+        <item>Fantasy</item>
+        <item>Racconti storici</item>
+        <item>Avventura</item>
+        <item>Prima fascia d\'età</item>
+        <item>Seconda fascia d\'età</item>
+        <item>Romantici</item>
+        <item>Fumetti</item>
+        <item>Teatro/Aforismi</item>
+        <item>Giochi</item>
+        <item>Horror</item>
+        <item>Humor</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -101,5 +120,34 @@
     <string name="new_loan_req">Nuove Richieste Prestito</string>
     <string name="date_in_past">Data non valida, l\'attività non può avvenire nel passato!</string>
     <string name="loan_already_requested_another_user">Prestito già richiesto da un altro utente</string>
+    <string name="save">Salva</string>
+    <string name="cdd">CDD</string>
+    <string name="editore">Editore</string>
+    <string name="n_ingresso">N. Ingresso</string>
+    <string name="insert_cdd">Inserire CDD</string>
+    <string name="insert_edition">Inserire edizione</string>
+    <string name="insert_entry_n">Inserire N. Ingresso</string>
+    <string name="search_by_title">Ricerca titolo</string>
+    <string name="search_by_author">Ricerca autore</string>
+    <string name="search_by_genre">Ricerca genere</string>
+    <string name="insert_author_here">Inserire autore!</string>
+    <string name="insert_entry_number">Inserire n. ingresso! (No "IIM")</string>
+    <string name="search_by_entry_number">Ricerca n. ingresso</string>
+    <string name="insert_title_author">Inserire titolo/autore qui!</string>
+    <string name="insert_entry_here">Inserire n. ingresso qui!</string>
+    <string name="edit">Modifica</string>
+    <string name="year">Anno</string>
+    <string name="edit_book">Modifica libro</string>
+    <string name="only_book">Solo i libri possono essere modificati!</string>
+    <string name="edit_title">Titolo modificato!</string>
+    <string name="edit_author">Autore modificato!</string>
+    <string name="edit_publisher">Editore modificato!</string>
+    <string name="edit_cdd">CDD modificato!</string>
+    <string name="edit_entry">N. ingresso modificato!</string>
+    <string name="edit_year">Anno modificato!</string>
+    <string name="select_genre">Seleziona il genere!</string>
+    <string name="nothing_save">Non c\'è niente da salvare, riprova più tardi!</string>
+    <string name="wait_save">Aspetta! sto scaricando gli oggetti dal database&#8230;</string>
+    <string name="success_save">Salvataggio riuscito!</string>
 
 </resources>

@@ -4,7 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -61,9 +62,11 @@
             android:name=".activity.user.ObjectDetail"
             android:label="@string/detail"
             android:screenOrientation="portrait" />
-
-
-        <activity android:name=".activity.admin.EndOfLoan" />
+        <activity android:name=".activity.admin.EndOfLoan"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.admin.EditActivity"
+            android:label="@string/edit_book"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

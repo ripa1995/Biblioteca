@@ -29,6 +29,25 @@
     <string name="title_activity_user_tabbed">UserTabbedActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string-array name="genre">
+        <item>Genre</item>
+        <item>For teens</item>
+        <item>First book</item>
+        <item>Fairy tales</item>
+        <item>Myth</item>
+        <item>Mystery</item>
+        <item>Fantasy</item>
+        <item>History</item>
+        <item>Adventure</item>
+        <item>First age group</item>
+        <item>Second age group</item>
+        <item>Romantic</item>
+        <item>Comics</item>
+        <item>Theatre/Aphorism</item>
+        <item>Game</item>
+        <item>Horror</item>
+        <item>Humor</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -105,5 +124,34 @@
     <string name="new_loan_req">New Loan Request</string>
     <string name="date_in_past">Invalid date, the activity can not take place in the past!</string>
     <string name="loan_already_requested_another_user">Loan already requested by another user</string>
+    <string name="save">Save</string>
+    <string name="cdd">CDD</string>
+    <string name="n_ingresso">Entry number</string>
+    <string name="insert_cdd">Insert CDD</string>
+    <string name="insert_edition">Insert edition</string>
+    <string name="insert_entry_n">Insert entry number</string>
+    <string name="search_by_title">Search by title</string>
+    <string name="search_by_author">Search by author</string>
+    <string name="search_by_genre">Search by genre</string>
+    <string name="insert_author_here">Insert author here!</string>
+    <string name="insert_entry_number">Insert entry number!</string>
+    <string name="search_by_entry_number">Search by entry number</string>
+    <string name="insert_title_author">Insert title/author here!</string>
+    <string name="insert_entry_here">Insert entry number here!</string>
+    <string name="edit">Edit</string>
+    <string name="year">Year</string>
+    <string name="editore">Publisher</string>
+    <string name="edit_book">Edit Book</string>
+    <string name="only_book">Only book can be edited!</string>
+    <string name="edit_title">Title edited!</string>
+    <string name="edit_author">Author edited!</string>
+    <string name="edit_publisher">Publisher edited!</string>
+    <string name="edit_cdd">CDD edited!</string>
+    <string name="edit_entry">Entry number edited!</string>
+    <string name="edit_year">Year edited!</string>
+    <string name="select_genre">Select the genre!</string>
+    <string name="nothing_save">Nothing to save, retry later!</string>
+    <string name="wait_save">Wait! I\'m downloading objects from database&#8230;</string>
+    <string name="success_save">Saved successfully!</string>
 
 </resources>

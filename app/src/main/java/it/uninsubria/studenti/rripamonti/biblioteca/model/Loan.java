@@ -7,7 +7,7 @@ import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
  */
 
 public class Loan {
-    private String libraryObjectId;
+
     private long start_date;
 
     private String userId;
@@ -17,7 +17,7 @@ public class Loan {
     private String title;
     private String isbn;
     private String author;
-
+    private String loId;
     public Loan() {
 
     }
@@ -27,16 +27,24 @@ public class Loan {
 
 
     public Loan(String mLo, String uid, String mId, Type mTipo, String mTitle, String mISBN,String mAuthor) {
-        this.idLoan = mId;
-        this.title = mTitle;
-        this.libraryObjectId = mLo;
-        this.userId = uid;
+        idLoan = mId;
+        title = mTitle;
+        loId = mLo;
+        userId = uid;
         start_date = 0;
         start = false;
         tipo = mTipo;
         isbn = mISBN;
         author = mAuthor;
 
+    }
+
+    public String getLoId() {
+        return loId;
+    }
+
+    public void setLoId(String loId) {
+        this.loId = loId;
     }
 
     public String getTitle() {
@@ -47,13 +55,6 @@ public class Loan {
         this.title = title;
     }
 
-    public String getLibraryObjectId() {
-        return libraryObjectId;
-    }
-
-    public void setLibraryObjectId(String libraryObjectId) {
-        this.libraryObjectId = libraryObjectId;
-    }
 
     public long getStart_date() {
         return start_date;
