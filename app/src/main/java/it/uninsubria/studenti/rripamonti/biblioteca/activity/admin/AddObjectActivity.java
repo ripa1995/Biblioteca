@@ -214,6 +214,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
     }}
 
     private boolean areBookEditTextNotEmpty(){
+        String input = entryNumberControl(tv_ingresso.getText().toString());
         if (tv_title.length()==0){
             tv_title.setError(getString(R.string.insert_title));
             return false;
@@ -226,8 +227,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         } else if(tv_editore.length()==0) {
             tv_editore.setError(getString(R.string.insert_edition));
             return false;
-        } else if(tv_ingresso.length()==0) {
-            tv_ingresso.setError(getString(R.string.insert_entry_n));
+        } else if(input==null) {
             return false;
         } else {
             return true;
@@ -299,7 +299,9 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
 
                 if (areBookEditTextNotEmpty()){
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_editore.getText().toString(), Type.BOOK,tv_cdd.getText().toString(), id);
+                    String title = capitalizeFirstLetter(tv_title.getText().toString());
+                    String author = capitalizeFirstLetter(tv_author.getText().toString());
+                    LibraryObject libraryObject = new LibraryObject(title,author,tv_editore.getText().toString(), Type.BOOK,tv_cdd.getText().toString(), id);
                     libraryObject.setnIngresso(tv_ingresso.getText().toString());
 
                     myRef = database.getReference("objects");
@@ -317,7 +319,9 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 if(areObjectEditTextNotEmpty()){
                     
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(),tv_author.getText().toString(),tv_category.getText().toString(), Type.MUSIC,"0", id);
+                    String title = capitalizeFirstLetter(tv_title.getText().toString());
+                    String author = capitalizeFirstLetter(tv_author.getText().toString());
+                    LibraryObject libraryObject = new LibraryObject(title ,author,tv_category.getText().toString(), Type.MUSIC,"0", id);
                     myRef = database.getReference("objects");
                     myRef.child(id).setValue(libraryObject);
                     clearTextView();
@@ -332,7 +336,9 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
                 if(areFilmEditTextNotEmpty()) {
 
                     String id = String.valueOf(new GregorianCalendar().getTimeInMillis());
-                    LibraryObject libraryObject = new LibraryObject(tv_title.getText().toString(), tv_author.getText().toString(), tv_category.getText().toString(), Type.FILM,tv_cdd.getText().toString(), id);
+                    String title = capitalizeFirstLetter(tv_title.getText().toString());
+                    String author = capitalizeFirstLetter(tv_author.getText().toString());
+                    LibraryObject libraryObject = new LibraryObject(title, author, tv_category.getText().toString(), Type.FILM,tv_cdd.getText().toString(), id);
                     myRef = database.getReference("objects");
                     myRef.child(id).setValue(libraryObject);
                     clearTextView();
@@ -377,5 +383,23 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
         dueDate = new GregorianCalendar();
         dueDate.setTimeInMillis(creationDate.getTimeInMillis());
 
+    }
+    private String entryNumberControl(String input){
+        if (input.length()<4){
+            Toast.makeText(getApplicationContext(), getString(R.string.entry_format), Toast.LENGTH_LONG).show();
+            return null;
+        }
+        if (input.substring(0,4).equals("IIM ")) {
+            return input;
+        } else if (input.substring(0,4).equalsIgnoreCase("IIM ")) {
+            return input.substring(0,4).toUpperCase() + input.substring(4);
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.entry_format), Toast.LENGTH_LONG).show();
+            return null;
+        }
+    }
+    private String capitalizeFirstLetter(String input){
+        String output = input.substring(0, 1).toUpperCase() + input.substring(1);
+        return output;
     }
 }

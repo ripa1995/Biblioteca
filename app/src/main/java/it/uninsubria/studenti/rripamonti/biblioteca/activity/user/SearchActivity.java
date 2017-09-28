@@ -2,6 +2,7 @@ package it.uninsubria.studenti.rripamonti.biblioteca.activity.user;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -68,6 +69,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     private Button btn_search_title, btn_search_author, btn_search_genre, btn_search_entry;
     private EditText et_search;
     private FirebaseAuth mAuth;
+    private Query ref;
     private String selected;
 
 
@@ -152,7 +154,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 if (titolo.length()==0){
                     et_search.setError(getString(R.string.insert_title_error));
                 } else {
-                    Query ref = myRef.orderByChild("title").startAt(titolo).endAt(titolo+"\uf8ff");
+                    titolo = capitalizeFirstLetter(titolo);
+                    ref = myRef.orderByChild("title").startAt(titolo).endAt(titolo+"\uf8ff");
                     adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row, LibraryObjectHolder.class, ref) {
                         @Override
                         protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
@@ -219,8 +222,22 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                             });
                         }
 
+
                     };
                     recyclerView.setAdapter(adapter);
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue()==null){
+                                Toast.makeText(getApplicationContext(), getString(R.string.case_sensitive),Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 break;
             case R.id.btn_search_author:
@@ -230,7 +247,8 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 if (autore.length()==0){
                     et_search.setError(getString(R.string.insert_author_here));
                 } else {
-                    Query ref = myRef.orderByChild("author").startAt(autore).endAt(autore+"\uf8ff");
+                    autore = capitalizeFirstLetter(autore);
+                    ref = myRef.orderByChild("author").startAt(autore).endAt(autore+"\uf8ff");
                     adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row, LibraryObjectHolder.class, ref) {
                         @Override
                         protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
@@ -299,13 +317,26 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
                     };
                     recyclerView.setAdapter(adapter);
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue()==null){
+                                Toast.makeText(getApplicationContext(), getString(R.string.case_sensitive),Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 break;
             case R.id.btn_search_genre:
                     if (selected == null) {
                         Toast.makeText(getApplicationContext(), getString(R.string.select_genre),Toast.LENGTH_LONG).show();
                     } else {
-                        Query ref = myRef.orderByChild("isbn").startAt(selected).endAt(selected+"\uf8ff");
+                        ref = myRef.orderByChild("isbn").startAt(selected).endAt(selected+"\uf8ff");
                         adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row, LibraryObjectHolder.class, ref) {
                             @Override
                             protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
@@ -363,7 +394,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                                     public void onClick(View v) {
                                         LibraryObject lo = items.get(position);
 
-                                        Intent intent = new Intent(v.getContext(),ObjectDetail.class);
+                                        Intent intent = new Intent(v.getContext(),RequestLoan.class);
                                         Bundle extras = new Bundle();
                                         extras.putSerializable("key",lo);
                                         intent.putExtras(extras);
@@ -384,7 +415,7 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
                 if (entry.length()==0){
                     et_search.setError(getString(R.string.insert_entry_number));
                 } else {
-                    Query ref = myRef.orderByChild("nIngresso").startAt("IIM "+entry).endAt("IIM "+entry+"\uf8ff");
+                    ref = myRef.orderByChild("nIngresso").startAt("IIM "+entry).endAt("IIM "+entry+"\uf8ff");
                     adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row, LibraryObjectHolder.class, ref) {
                         @Override
                         protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {
@@ -453,6 +484,18 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
 
                     };
                     recyclerView.setAdapter(adapter);
+                    ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.getValue()==null){
+                                Toast.makeText(getApplicationContext(), getString(R.string.only_numbers),Toast.LENGTH_LONG).show();                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
                 break;
 
@@ -523,4 +566,9 @@ public class SearchActivity extends AppCompatActivity implements View.OnClickLis
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+    private String capitalizeFirstLetter(String input){
+        String output = input.substring(0, 1).toUpperCase() + input.substring(1);
+        return output;
+    }
+
 }

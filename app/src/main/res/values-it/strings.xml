@@ -149,5 +149,8 @@
     <string name="nothing_save">Non c\'è niente da salvare, riprova più tardi!</string>
     <string name="wait_save">Aspetta! sto scaricando gli oggetti dal database&#8230;</string>
     <string name="success_save">Salvataggio riuscito!</string>
+    <string name="case_sensitive">La ricerca tiene conto del MAIUSCOLO e del minuscolo!</string>
+    <string name="only_numbers">La ricerca è basata solo sul numero, ad esempio 0001.</string>
+    <string name="entry_format">Il numero di ingresso deve essere del formato: IIM XXXX, dove XXXX è un numero!</string>
 
 </resources>

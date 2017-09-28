@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.SplashScreen"
-            android:screenOrientation="portrait"
+
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,47 +26,50 @@
         <activity
             android:name=".activity.FirebaseLoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.RegisterActivity"
             android:label="@string/register"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.user.SearchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/search"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.user.LoanStatusActivity"
             android:label="@string/loan_status"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.user.RequestLoan"
             android:label="@string/request_loan"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.admin.AdminMainActivity"
             android:label="@string/new_loan_req"
-            android:screenOrientation="portrait">
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.admin.AddObjectActivity"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.user.UserTabbedActivity"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" />
+             />
         <activity
             android:name=".activity.user.ObjectDetail"
             android:label="@string/detail"
-            android:screenOrientation="portrait" />
+            />
         <activity android:name=".activity.admin.EndOfLoan"
-            android:screenOrientation="portrait"/>
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            />
         <activity android:name=".activity.admin.EditActivity"
             android:label="@string/edit_book"
-            android:screenOrientation="portrait"/>
+            />
     </application>
 
 </manifest>

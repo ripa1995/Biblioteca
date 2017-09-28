@@ -57,15 +57,37 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
+    private String capitalizeFirstLetter(String input){
+        String output = input.substring(0, 1).toUpperCase() + input.substring(1);
+        return output;
+    }
+
+    private String entryNumberControl(String input){
+        if (input.length()<4){
+            Toast.makeText(getApplicationContext(), getString(R.string.entry_format), Toast.LENGTH_LONG).show();
+            return null;
+        }
+        if (input.substring(0,4).equals("IIM ")) {
+            return input;
+        } else if (input.substring(0,4).equalsIgnoreCase("IIM ")) {
+            return input.substring(0,4).toUpperCase() + input.substring(4);
+        } else {
+            Toast.makeText(getApplicationContext(), getString(R.string.entry_format), Toast.LENGTH_LONG).show();
+            return null;
+        }
+    }
+
     @Override
     public void onClick(View v) {
         if (et_title.length()!=0){
-            myRef.child(id).child("title").setValue(et_title.getText().toString());
+            String string = capitalizeFirstLetter(et_title.getText().toString());
+            myRef.child(id).child("title").setValue(string);
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.edit_title) ,Toast.LENGTH_LONG);
             toast.show();
         }
         if (et_author.length()!=0){
-            myRef.child(id).child("author").setValue(et_author.getText().toString());
+            String string = capitalizeFirstLetter(et_author.getText().toString());
+            myRef.child(id).child("author").setValue(string);
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.edit_author) ,Toast.LENGTH_LONG);
             toast.show();
         }
@@ -80,9 +102,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             toast.show();
         }
         if (et_nIngresso.length()!=0) {
-            myRef.child(id).child("nIngresso").setValue(et_nIngresso.getText().toString());
-            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.edit_entry) ,Toast.LENGTH_LONG);
-            toast.show();
+            String string = entryNumberControl(et_nIngresso.getText().toString());
+            if (string!=null) {
+                myRef.child(id).child("nIngresso").setValue(string);
+                Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.edit_entry), Toast.LENGTH_LONG);
+                toast.show();
+            }
         }
         if (et_year.length()!= 0) {
             myRef.child(id).child("year").setValue(et_year.getText().toString());

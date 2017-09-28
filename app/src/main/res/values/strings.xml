@@ -153,5 +153,8 @@
     <string name="nothing_save">Nothing to save, retry later!</string>
     <string name="wait_save">Wait! I\'m downloading objects from database&#8230;</string>
     <string name="success_save">Saved successfully!</string>
+    <string name="case_sensitive">Search function is CaSe SeNsItIvE</string>
+    <string name="only_numbers">You have to search only the numbers, like 0001</string>
+    <string name="entry_format">Entry number must be in this format: IIM XXXX , where XXXX is the number!</string>
 
 </resources>
