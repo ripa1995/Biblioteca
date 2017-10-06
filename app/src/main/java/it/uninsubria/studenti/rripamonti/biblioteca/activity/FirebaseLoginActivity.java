@@ -197,6 +197,7 @@ public class FirebaseLoginActivity extends AppCompatActivity{
                                 Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
 
                                 if (task.isSuccessful()) {
+                                    //controllo se utente è admin o no
                                     FirebaseUser user = mAuth.getCurrentUser();
                                     DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("Admin");
                                     ref.addValueEventListener(new ValueEventListener() {

@@ -60,7 +60,89 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
         btn_search = (Button) findViewById(R.id.btn_search);
         btn_search.setOnClickListener(this);
         et_search = (EditText) findViewById(R.id.et_search);
+        Query ref2 = myRef.orderByChild("title");
+        adapter = new FirebaseRecyclerAdapter<Loan, LoanStatusHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanStatusHolder.class, ref2) {
+            @Override
+            protected void populateViewHolder(final LoanStatusHolder viewHolder, final Loan model, final int position) {
+                switch (model.getTipo().toString()) {
+                    case "BOOK":
+                        //immagine libro
+                        Picasso.with(getApplicationContext()).load("http://covers.openlibrary.org/b/isbn/"+model.getIsbn()+"-M.jpg?default=false").placeholder(R.drawable.ic_action_book).error(R.drawable.ic_action_book).into(viewHolder.itemImage);
 
+                        break;
+                    case "FILM":
+                        viewHolder.itemImage.setImageResource(R.drawable.ic_action_movie);
+                        MovieService.getInstance(getApplicationContext()).getMovie(model.getIsbn(), new MovieService.Callback() {
+                            @Override
+                            public void onLoad(Movie movie) {
+                                if (movie != null) {
+                                    Picasso.with(getApplicationContext()).load(movie.getPosterUrl()).placeholder(R.drawable.ic_action_movie).error(R.drawable.ic_action_movie).into(viewHolder.itemImage);
+                                }
+                            }
+                            @Override
+                            public void onFailure() {
+
+                            }
+                        });
+                        break;
+                    case "MUSIC":
+                        viewHolder.itemImage.setImageResource(R.drawable.ic_action_music_1);
+                        AlbumService.getInstance(getApplicationContext()).getAlbum(model.getAuthor(), model.getTitle(), new AlbumService.Callback() {
+                            @Override
+                            public void onLoad(Album album) {
+                                if (album != null) {
+                                    List<Album.Image> list = album.getImages();
+                                    Log.d(TAG, album.getArtist());
+                                    for (Album.Image image : list) {
+                                        if (image.getSize().equals("medium")) {
+                                            Picasso.with(getApplicationContext()).load(image.getText()).placeholder(R.drawable.ic_action_music_1).error(R.drawable.ic_action_music_1).into(viewHolder.itemImage);
+                                        }
+                                    }
+
+                                }
+                            }
+                            @Override
+                            public void onFailure() {
+                            }
+                        });
+
+                        break;
+                }
+                items.add(position, model);
+                viewHolder.tvTitle.setText(model.getTitle());
+                viewHolder.tvStartOfLoan.setText(model.getUserId());
+                if (model.isStart()){
+                    viewHolder.tvEndOfLoan.setText(new SimpleDateFormat("dd/MM/yyyy").format(model.getStart_date()));
+                } else {
+                    viewHolder.tvEndOfLoan.setText(getString(R.string.not_started));
+                }
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //creare un dialog per la conferma della cancellazione
+                        alertDialogBuilder = new AlertDialog.Builder(v.getContext());
+                        alertDialogBuilder.setMessage(getString(R.string.dialog_delete));
+                        alertDialogBuilder.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                database.getReference().child("loans").child(model.getIdLoan()).removeValue();
+                            }
+                        });
+                        alertDialogBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+
+                    }
+                });
+
+            }
+        };
+        recyclerView.setAdapter(adapter);
     }
 
 
@@ -77,12 +159,12 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
         items.clear();
         et_search.setError(null);
         String id = et_search.getText().toString();
-
+        Query ref;
         if (id.length() == 0) {
-            et_search.setError(getString(R.string.insert_userid));
+            ref = myRef.orderByChild("title");
         } else {
-            Query ref = myRef.orderByChild("userId").startAt(id).endAt(id+"\uF8FF");
-
+            ref = myRef.orderByChild("userId").startAt(id).endAt(id + "\uF8FF");
+        }
             adapter = new FirebaseRecyclerAdapter<Loan, LoanStatusHolder>(Loan.class, R.layout.recyclerview_item_row_loanstatus, LoanStatusHolder.class, ref) {
                 @Override
                 protected void populateViewHolder(final LoanStatusHolder viewHolder, final Loan model, final int position) {
@@ -165,6 +247,6 @@ public class EndOfLoan extends AppCompatActivity implements View.OnClickListener
                 }
             };
             recyclerView.setAdapter(adapter);
-        }
+
     }
 }

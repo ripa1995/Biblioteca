@@ -1,8 +1,6 @@
-package it.uninsubria.studenti.rripamonti.biblioteca.activity.user;
+package it.uninsubria.studenti.rripamonti.biblioteca.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,14 +8,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -29,27 +24,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.RequestLoan;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
-import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LibraryObjectHolder;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;

@@ -77,6 +77,7 @@ public class LastExtraActivitiesFragment extends Fragment {
         ref.keepSynced(true);
 
         Query myRef = ref.orderByChild("date").startAt(new GregorianCalendar().getTimeInMillis());
+        //prendo solo gli eventi non ancora avvenuti
         adapter = new FirebaseRecyclerAdapter<ExtraActivity, ActivitiesHolder>(ExtraActivity.class, R.layout.recyclerview_item_row,ActivitiesHolder.class, myRef) {
             @Override
             protected void populateViewHolder(ActivitiesHolder viewHolder, ExtraActivity model, int position) {

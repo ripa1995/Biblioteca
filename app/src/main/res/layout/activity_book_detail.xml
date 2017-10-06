@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
 
-    tools:context=".activity.user.ObjectDetail">
+    tools:context=".activity.ObjectDetail">
     <include
         android:id="@+id/tool_bar"
         layout="@layout/tool_bar"
@@ -73,6 +73,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/edit"
+        android:visibility="gone" />
+    <Button
+        android:id="@+id/btn_loan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/new_loan"
         android:visibility="gone" />
 
 

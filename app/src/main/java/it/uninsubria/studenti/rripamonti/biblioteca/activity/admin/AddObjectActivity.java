@@ -267,7 +267,7 @@ public class AddObjectActivity extends AppCompatActivity implements AdapterView.
     }
     @Override
     public void onClick(View v) {
-
+        //come id univoco prendo il tempo in questo istante in millisecondi
         switch (selected){
             case (0):
                 //creare extraActivity

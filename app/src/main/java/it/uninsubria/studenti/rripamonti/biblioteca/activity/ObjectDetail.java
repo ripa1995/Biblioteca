@@ -1,4 +1,4 @@
-package it.uninsubria.studenti.rripamonti.biblioteca.activity.user;
+package it.uninsubria.studenti.rripamonti.biblioteca.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -24,19 +24,20 @@ import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.admin.EditActivity;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.admin.NewLoanActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.enums.Type;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.AlbumService;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Movie;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
-
+//mostra i dettali relativi agli oggetti cercati
 public class ObjectDetail extends AppCompatActivity implements View.OnClickListener {
     private LibraryObject lo;
     private static final String TAG = "Object Detail";
     private ImageView mItemImage;
     private TextView mItemTitle, mItemAuthor, mItemISBN, mItemCategory;
-    private Button btn_edit;
+    private Button btn_edit, btn_loan;
     private FirebaseAuth mAuth;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +47,16 @@ public class ObjectDetail extends AppCompatActivity implements View.OnClickListe
         initUi();
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
+        //guardo se l'utente è admin
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("Admin");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, dataSnapshot.getValue().toString());
                 if (Boolean.parseBoolean(dataSnapshot.getValue().toString())) {
+                    //se è admin attivo i bottoni relativi alla modifica e al prestito
                     btn_edit.setVisibility(View.VISIBLE);
+                    btn_loan.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -90,6 +94,9 @@ public class ObjectDetail extends AppCompatActivity implements View.OnClickListe
         btn_edit = (Button) findViewById(R.id.btn_edit);
         btn_edit.setVisibility(View.GONE);
         btn_edit.setOnClickListener(this);
+        btn_loan = (Button) findViewById(R.id.btn_loan);
+        btn_loan.setVisibility(View.GONE);
+        btn_loan.setOnClickListener(this);
     }
 
     //popola la view in base all'oggetto passato tramite intent
@@ -149,16 +156,28 @@ public class ObjectDetail extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (lo.getType().equals(Type.BOOK)){
-            Intent intent = new Intent(v.getContext(),EditActivity.class);
+        if (v.getId()==R.id.btn_edit) {
+            //premo modifica, quindi avvio l'activity per la modifica
+            if (lo.getType().equals(Type.BOOK)) {
+                Intent intent = new Intent(v.getContext(), EditActivity.class);
+                Bundle extras = new Bundle();
+                extras.putSerializable("key", lo);
+                intent.putExtras(extras);
+                v.getContext().startActivity(intent);
+            } else {
+                Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.only_book), Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
+        if (v.getId()==R.id.btn_loan){
+            //premo nuovo prestito, quindi avvio attività nuovo prestito
+            Intent intent = new Intent(v.getContext(), NewLoanActivity.class);
             Bundle extras = new Bundle();
-            extras.putSerializable("key",lo);
+            extras.putSerializable("key", lo);
             intent.putExtras(extras);
             v.getContext().startActivity(intent);
-        } else {
-            Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.only_book),Toast.LENGTH_LONG);
-            toast.show();
         }
+
 
     }
 }

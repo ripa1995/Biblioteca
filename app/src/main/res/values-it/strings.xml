@@ -152,5 +152,8 @@
     <string name="case_sensitive">La ricerca tiene conto del MAIUSCOLO e del minuscolo!</string>
     <string name="only_numbers">La ricerca è basata solo sul numero, ad esempio 0001.</string>
     <string name="entry_format">Il numero di ingresso deve essere del formato: IIM XXXX, dove XXXX è un numero!</string>
+    <string name="new_loan">Nuovo prestito</string>
+    <string name="cla_ss">Classe</string>
+    <string name="fill_field">Completa tutti i campi!</string>
 
 </resources>

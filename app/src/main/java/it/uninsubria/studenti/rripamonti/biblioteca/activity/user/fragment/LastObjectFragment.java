@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
-import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.ObjectDetail;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.ObjectDetail;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.holder.LibraryObjectHolder;
 import it.uninsubria.studenti.rripamonti.biblioteca.rest.Album;
@@ -71,6 +69,7 @@ public class LastObjectFragment extends Fragment {
 
         ref.keepSynced(true);
         Query myRef = ref.limitToLast(25);
+        //prendo solo gli ultimi 25 oggetti inseriti
         adapter = new FirebaseRecyclerAdapter<LibraryObject, LibraryObjectHolder>(LibraryObject.class, R.layout.recyclerview_item_row,LibraryObjectHolder.class, myRef) {
             @Override
             protected void populateViewHolder(final LibraryObjectHolder viewHolder, LibraryObject model, final int position) {

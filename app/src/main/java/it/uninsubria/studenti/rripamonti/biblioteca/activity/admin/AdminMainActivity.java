@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.PersistableBundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,13 +32,12 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.FirebaseLoginActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
-import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.SearchActivity;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.SearchActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.CSVTools;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.LibraryObject;
 import it.uninsubria.studenti.rripamonti.biblioteca.model.Loan;
@@ -354,6 +351,8 @@ public class AdminMainActivity extends AppCompatActivity implements Toolbar.OnMe
                 startActivity(intent);
                 return true;
             case R.id.action_save:
+
+                //questo commentato è nel caso in cui si debba importare da csv
                 /*List<LibraryObject> list = CSVTools.leggiCSVlibri();
                 Iterator<LibraryObject> iterator = list.iterator();
                 while (iterator.hasNext()){

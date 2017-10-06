@@ -71,6 +71,7 @@ public class SplashScreen extends AppCompatActivity {
             protected Boolean doInBackground(Void... params) {
                 if (isNetworkAvailable()) {
                     try {
+                        //controllo se c'è connessione a internet
                         HttpURLConnection urlc = (HttpURLConnection)
                                 (new URL("http://clients3.google.com/generate_204")
                                         .openConnection());

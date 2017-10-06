@@ -94,6 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void attemptRegister() {
+        //ipotizzando che al primo avvio dell'applicazione su un nuovo dispositivo avvenga in primis la registrazione controllo che play services sia aggiornato
         int currentVersion=0;
         try {
             currentVersion = getPackageManager().getPackageInfo(GoogleApiAvailability.GOOGLE_PLAY_SERVICES_PACKAGE, 0 ).versionCode;
@@ -182,7 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 map.put("Name",name.toString());
                                 map.put("Surname", surname.toString());
                                 map.put("Admin", "false");
-
+                            //se la registrazione va a buon fine, salvo l'utente nel db per verificare se admin o no
                                 ref.child("users").child(user.getUid()).setValue(map);
                                 finish();
 

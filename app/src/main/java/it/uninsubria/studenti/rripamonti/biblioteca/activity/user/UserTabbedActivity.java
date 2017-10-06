@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import it.uninsubria.studenti.rripamonti.biblioteca.R;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.FirebaseLoginActivity;
+import it.uninsubria.studenti.rripamonti.biblioteca.activity.SearchActivity;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.fragment.LastExtraActivitiesFragment;
 import it.uninsubria.studenti.rripamonti.biblioteca.activity.user.fragment.LastObjectFragment;
 

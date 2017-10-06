@@ -34,6 +34,7 @@ import it.uninsubria.studenti.rripamonti.biblioteca.rest.MovieService;
 
 /**
  * Created by rober on 03/05/2017.
+ * Request Loan consente agli utenti non bibliotecari di richiedere prestiti
  */
 
 public class RequestLoan extends AppCompatActivity {
@@ -69,6 +70,7 @@ public class RequestLoan extends AppCompatActivity {
             lo = (LibraryObject) extras.getSerializable("key");
         }
         switch (lo.getType().toString()) {
+            //in base al tipo cambio icona
             case "BOOK":
                 //immagine libro
                 mItemISBN.setText(lo.getIsbn());
@@ -127,15 +129,18 @@ public class RequestLoan extends AppCompatActivity {
         btn_loan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //query sul database, prendo i loans e li ordino per id oggetto
                 ref2 = database.getReference("loans").orderByChild("loId").equalTo(lo.getId());
                 ref2.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         if (dataSnapshot.getValue()==null){
+                            //non esiste un prestito con quell'id oggetto
                             insertLoan();
                         }else {
                             for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                                //guardo se il prestito è stato richiesto dall'utente attivo o da un terzo
                                 Loan loan1 = childSnapshot.getValue(Loan.class);
                                 Log.d(TAG, String.valueOf(loan1.getIdLoan()));
                                 if (loan1.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getEmail())){

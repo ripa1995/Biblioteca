@@ -156,5 +156,9 @@
     <string name="case_sensitive">Search function is CaSe SeNsItIvE</string>
     <string name="only_numbers">You have to search only the numbers, like 0001</string>
     <string name="entry_format">Entry number must be in this format: IIM XXXX , where XXXX is the number!</string>
+    <string name="new_loan">New Loan</string>
+
+    <string name="cla_ss">Class</string>
+    <string name="fill_field">Fill every field!</string>
 
 </resources>
